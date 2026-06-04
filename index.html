@@ -321,8 +321,23 @@ function boot(){
   document.getElementById('app').classList.remove('hidden');
   buildSrcToggle();
   const now=new Date();
-  document.getElementById('updated').innerHTML=`<span class="dotlive"></span> Datos al ${now.toLocaleDateString('es-AR')} · <button class="reload" onclick="location.reload()">actualizar</button>`;
   document.getElementById('footstamp').textContent='Abierto el '+now.toLocaleString('es-AR')+' · importes en pesos argentinos';
+
+  // Mostrar fecha/hora real de última actualización (subida por el script)
+  const updEl = document.getElementById('updated');
+  updEl.innerHTML = `<span class="dotlive"></span> Cargando datos…`;
+  fetch('last_updated.json?v=' + Date.now(), {cache:'no-store'})
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data && data.fecha && data.hora) {
+        updEl.innerHTML = `<span class="dotlive"></span> Última actualización: <b>${data.fecha} a las ${data.hora} hs</b> &nbsp;·&nbsp; <button class="reload" onclick="location.reload()">actualizar</button>`;
+      } else {
+        updEl.innerHTML = `<span class="dotlive"></span> Datos al ${now.toLocaleDateString('es-AR')} · <button class="reload" onclick="location.reload()">actualizar</button>`;
+      }
+    })
+    .catch(() => {
+      updEl.innerHTML = `<span class="dotlive"></span> Datos al ${now.toLocaleDateString('es-AR')} · <button class="reload" onclick="location.reload()">actualizar</button>`;
+    });
   render();
 }
 

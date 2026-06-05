@@ -365,7 +365,8 @@ function suppliers(list){
   list.forEach(i=>{ const k=i.prov;
     if(!m[k])m[k]={prov:i.prov,loc:i.loc,tipo:i.tipoProv,items:[],total:0,maxv:-1e9};
     m[k].items.push(i); m[k].total+=i.saldo;
-    if(!esCredito(i) && !sinVenc(i)) m[k].maxv=Math.max(m[k].maxv, venceDias(i)); });
+    if(!esCredito(i) && !sinVenc(i)) m[k].maxv=Math.max(m[k].maxv, venceDias(i));
+    if(!esCredito(i) && sinVenc(i))  m[k].maxDias=Math.max(m[k].maxDias||0, i.dias); });
   return Object.values(m);
 }
 function renderTypes(){
@@ -404,7 +405,18 @@ function render(){
   const q=state.q.trim().toLowerCase();
   let sup=suppliers(list);
   if(q)sup=sup.filter(s=>(s.prov||'').toLowerCase().includes(q)||(s.loc||'').toLowerCase().includes(q));
-  sup.sort((a,b)=> state.sort==='nombre'?(a.prov||'').localeCompare(b.prov||''): state.sort==='dias'?b.maxv-a.maxv : b.total-a.total);
+  sup.sort((a,b)=>{
+    const aGast = a.tipo==='Proveedor Gastos y Servicios';
+    const bGast = b.tipo==='Proveedor Gastos y Servicios';
+    // Gastos y Servicios siempre van por antigüedad descendente
+    if(aGast && bGast) return (b.maxDias||0)-(a.maxDias||0);
+    // Mezcla: Mercadería primero, Gastos al final (o viceversa según filtro)
+    if(aGast !== bGast) return aGast ? 1 : -1;
+    // Mercadería: orden elegido por el usuario
+    return state.sort==='nombre' ? (a.prov||'').localeCompare(b.prov||'')
+         : state.sort==='dias'   ? b.maxv-a.maxv
+         :                         b.total-a.total;
+  });
 
   const cont=document.getElementById('list');
   if(!sup.length){cont.innerHTML=`<div class="empty"><strong>Sin resultados</strong>No hay cuentas ${state.tab==='porvencer'?'por vencer':'vencidas'} con estos filtros.</div>`;return;}

@@ -411,8 +411,9 @@ function render(){
   cont.innerHTML=sup.map(s=>{
     const fav=s.total<0, t=termOf(s.prov), custom=(s.prov in terms);
     const tipo=TIPOS[s.tipo]||{lbl:s.tipo||'—',cls:''};
+    const maxDias = Math.max(...s.items.filter(i=>!esCredito(i)).map(i=>i.dias), 0);
     let statTag = fav ? '<span class="tag fav">saldo a favor</span>'
-      : tipo.cls==='gast' ? '<span class="tag cnt">sin vencimiento</span>'
+      : tipo.cls==='gast' ? `<span class="tag cnt">sin vencimiento · <b>${maxDias}d</b> la más antigua</span>`
       : s.maxv>0 ? `<span class="tag dias ${s.maxv>60?'hi':''}">${s.maxv} días vencido</span>`
       : `<span class="tag dias ok">faltan ${-s.maxv} días</span>`;
     const rows=s.items.slice().sort((a,b)=>venceDias(b)-venceDias(a)).map(i=>{

@@ -220,10 +220,9 @@ const TIPOS = {'Proveedor Mercadería':{lbl:'Mercadería',cls:'merc'},'Proveedor
 const termOf = p => terms[p] ?? DEFAULT_TERM;
 const venceDias  = i => i.dias - termOf(i.prov);
 const esCredito  = i => credComp.has(i.comp) || i.saldo < 0;
-// Bucket (en qué tab aparece): todos los items usan venceDias, así los pagos netan con las facturas vencidas
-const isVencido  = i => venceDias(i) > 0;
-// Solo para colores/etiquetas del proveedor: un proveedor es "vencido" si tiene facturas vencidas (no pagos)
-const isVencidoFactura = i => !esCredito(i) && venceDias(i) > 0;
+const sinVenc    = i => i.tipoProv === 'Proveedor Gastos y Servicios';  // sin lógica de vencimiento
+const isVencido  = i => !sinVenc(i) && venceDias(i) > 0;
+const isVencidoFactura = i => !esCredito(i) && !sinVenc(i) && venceDias(i) > 0;
 
 let DATA = {};
 let state = {src:null, tab:'porvencer', q:'', sort:'monto', type:'all'};
@@ -412,15 +411,20 @@ function render(){
   cont.innerHTML=sup.map(s=>{
     const fav=s.total<0, t=termOf(s.prov), custom=(s.prov in terms);
     const tipo=TIPOS[s.tipo]||{lbl:s.tipo||'—',cls:''};
-    let statTag = fav?'<span class="tag fav">saldo a favor</span>'
-      : s.maxv>0?`<span class="tag dias ${s.maxv>60?'hi':''}">${s.maxv} días vencido</span>`
+    let statTag = fav ? '<span class="tag fav">saldo a favor</span>'
+      : tipo.cls==='gast' ? '<span class="tag cnt">sin vencimiento</span>'
+      : s.maxv>0 ? `<span class="tag dias ${s.maxv>60?'hi':''}">${s.maxv} días vencido</span>`
       : `<span class="tag dias ok">faltan ${-s.maxv} días</span>`;
     const rows=s.items.slice().sort((a,b)=>venceDias(b)-venceDias(a)).map(i=>{
       const neg=i.saldo<0||credComp.has(i.comp), v=venceDias(i), venc=isVencido(i);
-      const dc=esCredito(i)?'d-ok':v<=0?'d-ok':v<=60?'d-hi':'d-vhi';
-      const pill=esCredito(i)?'crédito':v>0?`${v}d vencido`:`faltan ${-v}d`;
-      const estadoBadge=esCredito(i)?`<span class="estado pv">Crédito</span>`:
-        `<span class="estado ${venc?'vn':'pv'}">${venc?'Vencido':'Por vencer'}</span>`;
+      const dc = esCredito(i)||sinVenc(i) ? 'd-ok' : v<=0?'d-ok':v<=60?'d-hi':'d-vhi';
+      const pill = esCredito(i) ? 'crédito'
+                 : sinVenc(i)   ? `${i.dias}d`
+                 : v>0          ? `${v}d vencido`
+                 :                `faltan ${-v}d`;
+      const estadoBadge = esCredito(i) ? `<span class="estado pv">Crédito</span>`
+                        : sinVenc(i)   ? `<span class="estado" style="background:#f0f0f0;color:#888">Sin venc.</span>`
+                        : `<span class="estado ${venc?'vn':'pv'}">${venc?'Vencido':'Por vencer'}</span>`;
       return `<tr>
         <td><span class="comp ${neg?'cred':''}">${i.comp||''}</span> <span style="color:var(--ink-soft)">${i.nro||''}</span></td>
         <td>${i.fvto||'—'} <span style="color:var(--ink-soft);font-size:.78em">· ${i.dias}d antig.</span></td>

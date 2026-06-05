@@ -219,7 +219,8 @@ const credComp = new Set(['NOTA CRED.','PAGO','S. A FAVOR','RECIBO']);
 const TIPOS = {'Proveedor Mercadería':{lbl:'Mercadería',cls:'merc'},'Proveedor Gastos y Servicios':{lbl:'Gastos y Servicios',cls:'gast'}};
 const termOf = p => terms[p] ?? DEFAULT_TERM;
 const venceDias = i => i.dias - termOf(i.prov);
-const isVencido = i => venceDias(i) > 0;
+const esCredito  = i => credComp.has(i.comp) || i.saldo < 0;
+const isVencido  = i => !esCredito(i) && venceDias(i) > 0;
 
 let DATA = {};
 let state = {src:null, tab:'porvencer', q:'', sort:'monto', type:'all'};
@@ -361,7 +362,8 @@ function suppliers(list){
   const m={};
   list.forEach(i=>{ const k=i.prov;
     if(!m[k])m[k]={prov:i.prov,loc:i.loc,tipo:i.tipoProv,items:[],total:0,maxv:-1e9};
-    m[k].items.push(i); m[k].total+=i.saldo; m[k].maxv=Math.max(m[k].maxv,venceDias(i)); });
+    m[k].items.push(i); m[k].total+=i.saldo;
+    if(!esCredito(i)) m[k].maxv=Math.max(m[k].maxv, venceDias(i)); });
   return Object.values(m);
 }
 function renderTypes(){
@@ -411,8 +413,9 @@ function render(){
       : s.maxv>0?`<span class="tag dias ${s.maxv>60?'hi':''}">${s.maxv} días vencido</span>`
       : `<span class="tag dias ok">faltan ${-s.maxv} días</span>`;
     const rows=s.items.slice().sort((a,b)=>venceDias(b)-venceDias(a)).map(i=>{
-      const neg=i.saldo<0||credComp.has(i.comp), v=venceDias(i), venc=v>0;
-      const dc=v<=0?'d-ok':v<=60?'d-hi':'d-vhi', pill=v>0?`${v}d vencido`:`faltan ${-v}d`;
+      const neg=i.saldo<0||credComp.has(i.comp), v=venceDias(i), venc=isVencido(i);
+      const dc=esCredito(i)?'d-ok':v<=0?'d-ok':v<=60?'d-hi':'d-vhi';
+      const pill=esCredito(i)?'crédito':v>0?`${v}d vencido`:`faltan ${-v}d`;
       return `<tr>
         <td><span class="comp ${neg?'cred':''}">${i.comp||''}</span> <span style="color:var(--ink-soft)">${i.nro||''}</span></td>
         <td>${i.fvto||'—'} <span style="color:var(--ink-soft);font-size:.78em">· ${i.dias}d antig.</span></td>

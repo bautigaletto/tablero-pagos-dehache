@@ -218,9 +218,12 @@ const fmt2 = new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',mini
 const credComp = new Set(['NOTA CRED.','PAGO','S. A FAVOR','RECIBO']);
 const TIPOS = {'Proveedor Mercadería':{lbl:'Mercadería',cls:'merc'},'Proveedor Gastos y Servicios':{lbl:'Gastos y Servicios',cls:'gast'}};
 const termOf = p => terms[p] ?? DEFAULT_TERM;
-const venceDias = i => i.dias - termOf(i.prov);
+const venceDias  = i => i.dias - termOf(i.prov);
 const esCredito  = i => credComp.has(i.comp) || i.saldo < 0;
-const isVencido  = i => !esCredito(i) && venceDias(i) > 0;
+// Bucket (en qué tab aparece): todos los items usan venceDias, así los pagos netan con las facturas vencidas
+const isVencido  = i => venceDias(i) > 0;
+// Solo para colores/etiquetas del proveedor: un proveedor es "vencido" si tiene facturas vencidas (no pagos)
+const isVencidoFactura = i => !esCredito(i) && venceDias(i) > 0;
 
 let DATA = {};
 let state = {src:null, tab:'porvencer', q:'', sort:'monto', type:'all'};
@@ -363,7 +366,7 @@ function suppliers(list){
   list.forEach(i=>{ const k=i.prov;
     if(!m[k])m[k]={prov:i.prov,loc:i.loc,tipo:i.tipoProv,items:[],total:0,maxv:-1e9};
     m[k].items.push(i); m[k].total+=i.saldo;
-    if(!esCredito(i)) m[k].maxv=Math.max(m[k].maxv, venceDias(i)); });
+    if(isVencidoFactura(i)) m[k].maxv=Math.max(m[k].maxv, venceDias(i)); });
   return Object.values(m);
 }
 function renderTypes(){
@@ -416,10 +419,12 @@ function render(){
       const neg=i.saldo<0||credComp.has(i.comp), v=venceDias(i), venc=isVencido(i);
       const dc=esCredito(i)?'d-ok':v<=0?'d-ok':v<=60?'d-hi':'d-vhi';
       const pill=esCredito(i)?'crédito':v>0?`${v}d vencido`:`faltan ${-v}d`;
+      const estadoBadge=esCredito(i)?`<span class="estado pv">Crédito</span>`:
+        `<span class="estado ${venc?'vn':'pv'}">${venc?'Vencido':'Por vencer'}</span>`;
       return `<tr>
         <td><span class="comp ${neg?'cred':''}">${i.comp||''}</span> <span style="color:var(--ink-soft)">${i.nro||''}</span></td>
         <td>${i.fvto||'—'} <span style="color:var(--ink-soft);font-size:.78em">· ${i.dias}d antig.</span></td>
-        <td class="r"><span class="estado ${venc?'vn':'pv'}">${venc?'Vencido':'Por vencer'}</span></td>
+        <td class="r">${estadoBadge}</td>
         <td class="r"><span class="pill-d ${dc}">${pill}</span></td>
         <td class="r imp ${i.saldo<0?'neg':''}">${fmt2.format(i.saldo)}</td></tr>`;}).join('');
     return `<div class="sup"><div class="sup-head" onclick="this.parentNode.classList.toggle('open')">

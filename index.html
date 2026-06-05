@@ -365,7 +365,7 @@ function suppliers(list){
   list.forEach(i=>{ const k=i.prov;
     if(!m[k])m[k]={prov:i.prov,loc:i.loc,tipo:i.tipoProv,items:[],total:0,maxv:-1e9};
     m[k].items.push(i); m[k].total+=i.saldo;
-    if(isVencidoFactura(i)) m[k].maxv=Math.max(m[k].maxv, venceDias(i)); });
+    if(!esCredito(i) && !sinVenc(i)) m[k].maxv=Math.max(m[k].maxv, venceDias(i)); });
   return Object.values(m);
 }
 function renderTypes(){

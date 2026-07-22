@@ -135,8 +135,73 @@
   .pill-d{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.77rem;padding:2px 8px;border-radius:7px}
   .d-ok{background:var(--blue-bg);color:var(--blue)} .d-hi{background:var(--red-bg);color:var(--red)} .d-vhi{background:var(--red-bg2);color:var(--red-deep)}
 
+  /* ---- Timeline unificado ---- */
+  .tl-empty{padding:32px 18px;text-align:center;color:var(--ink-soft);font-size:.9rem}
+  .tl-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow-sm);transition:.15s}
+  .tl-card:hover{border-color:#cdd2e0;box-shadow:var(--shadow)}
+  .tl-card.urgent{border-left:4px solid var(--red)}
+  .tl-card.soon{border-left:4px solid #d99a3e}
+  .tl-week-head{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;background:var(--bg-tint);border-bottom:1px solid var(--line-soft);gap:12px}
+  .tl-week-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tl-week-label{font-family:'Archivo',sans-serif;font-weight:700;font-size:.95rem;color:var(--ink)}
+  .tl-week-badge{font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.08em}
+  .tl-week-badge.urgent{background:var(--red-bg);color:var(--red)}
+  .tl-week-badge.soon{background:#f6ead7;color:#c8762a}
+  .tl-week-total{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.95rem;color:var(--ink);white-space:nowrap}
+  .tl-item{display:grid;grid-template-columns:28px 1fr auto auto;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid var(--line-soft)}
+  .tl-item:last-child{border-bottom:0}
+  .tl-item.tl-pay{background:rgba(176,21,37,.025)}
+  .tl-item.tl-cheq{background:rgba(91,58,160,.025)}
+  .tl-icon{font-size:1rem;text-align:center}
+  .tl-info{}
+  .tl-supplier{font-weight:700;font-size:.88rem;color:var(--ink)}
+  .tl-sub{font-size:.73rem;color:var(--ink-soft);margin-top:2px}
+  .tl-bar-wrap{width:100px;height:5px;background:var(--line-soft);border-radius:3px;overflow:hidden;flex-shrink:0}
+  .tl-bar{height:100%;border-radius:3px}
+  .tl-bar.pay{background:var(--red)}
+  .tl-bar.cheq{background:#5b3aa0}
+  .tl-amt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.88rem;white-space:nowrap;text-align:right}
+  .tl-amt.pay{color:var(--red)} .tl-amt.cheq{color:#5b3aa0}
+
   .empty{text-align:center;padding:50px 20px;color:var(--ink-soft)}
   .empty strong{display:block;font-family:'Archivo',sans-serif;font-size:1.2rem;color:var(--ink);margin-bottom:6px}
+
+  /* ---- Proyección ---- */
+  #proj{margin-top:0}
+  .proj-add{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
+  .proj-add-title{font-family:'Archivo',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:12px;color:var(--ink);display:flex;align-items:center;gap:10px}
+  .proj-add-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .proj-add-row select,.proj-add-row input[type="number"]{font:inherit;font-size:.88rem;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+  .proj-add-row select{min-width:220px} .proj-add-row input[type="number"]{width:170px}
+  .proj-add-row select:focus,.proj-add-row input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,34,106,.12)}
+  .proj-btn{font:inherit;font-weight:700;font-size:.88rem;padding:10px 20px;border-radius:10px;border:0;background:var(--blue);color:#fff;cursor:pointer}
+  .proj-btn:hover{background:var(--blue-2)}
+  .proj-section{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .proj-section-title{font-family:'Archivo',sans-serif;font-weight:700;font-size:.93rem;padding:13px 18px;border-bottom:1px solid var(--line-soft);color:var(--ink);background:var(--bg-tint);display:flex;align-items:center;gap:8px}
+  .proj-table{width:100%;border-collapse:collapse;font-size:.85rem}
+  .proj-table thead th{text-align:left;font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;padding:9px 16px;border-bottom:1px solid var(--line)}
+  .proj-table thead th.r,.proj-table tbody td.r{text-align:right}
+  .proj-table tbody td{padding:9px 16px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  .proj-table tbody tr:last-child td{border-bottom:0}
+  .proj-table tbody tr:hover{background:rgba(0,34,106,.025)}
+  .del-btn{font:inherit;font-size:.73rem;background:var(--red-bg);color:var(--red);border:0;padding:3px 9px;border-radius:7px;cursor:pointer;font-weight:700}
+  .del-btn:hover{background:var(--red-bg2)}
+  .pay-chip{display:inline-flex;align-items:center;gap:5px;background:var(--bg-tint);border:1px solid var(--line-soft);border-radius:8px;padding:3px 9px;margin:2px 3px 2px 0;font-size:.81rem}
+  .pay-chip b{color:var(--blue);font-weight:700}
+  .cheque-chip{display:inline-flex;align-items:center;gap:5px;background:#f5f0fb;border:1px solid #d9c8f0;border-radius:8px;padding:3px 9px;margin:2px 3px 2px 0;font-size:.81rem}
+  .cheque-chip b{color:#5b3aa0;font-weight:700}
+  .tag-plazo{display:inline-block;font-size:.67rem;font-weight:700;padding:1px 7px;border-radius:5px;background:var(--blue-bg);color:var(--blue-2);margin-top:2px}
+  .proj-kpi.purple::before{background:#5b3aa0}
+  .proj-empty{padding:28px 18px;color:var(--ink-soft);text-align:center;font-size:.88rem}
+  .wcell{white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;color:var(--ink-soft);min-width:130px}
+  .wcell.has-pay{color:var(--ink)}
+  .week-total{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.92rem;white-space:nowrap}
+  .proj-summary{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px}
+  .proj-kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;flex:1;min-width:160px;box-shadow:var(--shadow-sm)}
+  .proj-kpi::before{content:"";display:block;width:32px;height:3px;border-radius:3px;margin-bottom:8px}
+  .proj-kpi.blue::before{background:var(--blue)} .proj-kpi.red::before{background:var(--red)} .proj-kpi.ink::before{background:var(--ink)}
+  .proj-kpi .lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);font-weight:700}
+  .proj-kpi .val{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.25rem;margin-top:6px;letter-spacing:-.03em}
 
   /* loader / fallback */
   #loader{text-align:center;padding:60px 20px}
@@ -193,11 +258,14 @@
       <div class="tabs" id="tabs">
         <button data-tab="porvencer" class="on">Por vencer <span class="badge" id="b-pv">0</span></button>
         <button data-tab="vencido">Vencido <span class="badge" id="b-v">0</span></button>
+        <button data-tab="proyeccion">Proyección</button>
       </div>
     </div>
     <div class="barwrap" id="barwrap"></div>
     <div class="list" id="list"></div>
   </div>
+
+  <div id="proj" class="hidden"></div>
 
   <footer>
     <div>Importe por comprobante: <b>Saldo del comprobante</b>. Importes en <span style="color:var(--blue-2);font-weight:700">azul</span> = notas de crédito, pagos o saldos a favor (restan deuda). El plazo de cada proveedor se ajusta dentro de su panel.</div>
@@ -207,10 +275,42 @@
 
 <script>
 /* ====================== CONFIG ====================== */
-const AUTO_FILES = ['F1.xls','F2.xls'];   // archivos que el tablero busca en el repo
+const AUTO_FILES = ['F1.xls','F2.xls','proveedores.xls'];   // archivos que el tablero busca en el repo
 const DEFAULT_TERM = 30;                  // plazo por defecto (días) para pasar a vencido
 const terms = { 'ALUMANTA':10, 'BUILDING TRUST':20 };  // plazos especiales por proveedor
 const KEEP_MAX_DIAS = 120;                // se descarta todo lo que supere estos días de antigüedad
+const allSuppliers = {};                  // todos los proveedores de los XLS, sin filtro de días
+const PLAZOS_KEY  = 'dehache_plazos_v1'; // plazos personalizados guardados en el navegador
+
+// Carga los plazos guardados en el navegador
+function loadPlazos(){
+  try{ const p=JSON.parse(localStorage.getItem(PLAZOS_KEY)||'{}');
+    Object.assign(terms, p); }catch(e){}
+}
+function savePlazos(){
+  try{ localStorage.setItem(PLAZOS_KEY, JSON.stringify(terms)); }catch(e){}
+}
+
+// Lee proveedores.xls: busca la fila de encabezados y extrae Razón Social
+function loadMasterSuppliers(buf){
+  try{
+    const wb=XLSX.read(buf,{type:'array'});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:null});
+    // Buscar fila de encabezados (contiene "Razón Social")
+    let hr=rows.findIndex(r=>r.some(c=>String(c||'').trim()==='Razón Social'));
+    if(hr<0) hr=2;
+    const H=rows[hr];
+    const colNombre=H.findIndex(c=>String(c||'').trim()==='Razón Social');
+    if(colNombre<0) return;
+    rows.slice(hr+1).forEach(r=>{
+      if(!r) return;
+      const nombre=String(r[colNombre]||'').replace(/\u00a5|¥/g,'Ñ').trim();
+      if(nombre) allSuppliers[nombre]=termOf(nombre);
+    });
+    console.log('Proveedores maestro cargados:', Object.keys(allSuppliers).length);
+  }catch(e){ console.warn('Error leyendo proveedores.xls',e); }
+}
 /* ==================================================== */
 
 const fmt = new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0});
@@ -268,6 +368,8 @@ function processWorkbook(buf, key){
     const r=rows[i]; if(!r) continue;
     const prov=clean(r[col.prov]); if(!prov) continue;
     const dias=Number(r[col.dias]); if(!isFinite(dias)) continue;
+    // Registrar en el listado completo ANTES del filtro de días
+    if(!allSuppliers[prov]) allSuppliers[prov] = termOf(prov);
     if(dias>KEEP_MAX_DIAS) continue;
     const saldo=Number(r[col.saldo])||0;
     items.push({prov, loc:clean(r[col.loc]), tipoProv:clean(r[col.tipo]),
@@ -285,9 +387,13 @@ async function loadFromRepo(){
       const res=await fetch(f,{cache:'no-store'});
       if(!res.ok) continue;
       const buf=await res.arrayBuffer();
-      const key=f.replace(/\.xlsx?$/i,'');
-      found[key]=processWorkbook(buf, key);
-    }catch(e){ /* archivo no disponible */ }
+      if(f==='proveedores.xls'||f==='proveedores.xlsx'){
+        loadMasterSuppliers(buf);
+      } else {
+        const key=f.replace(/\.xlsx?$/i,'');
+        found[key]=processWorkbook(buf, key);
+      }
+    }catch(e){}
   }
   return found;
 }
@@ -322,6 +428,7 @@ async function init(){
 function boot(){
   document.getElementById('loader').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
+  loadPlazos();
   buildSrcToggle();
   const now=new Date();
   document.getElementById('footstamp').textContent='Abierto el '+now.toLocaleString('es-AR')+' · importes en pesos argentinos';
@@ -464,10 +571,283 @@ function render(){
   });
 }
 
+// ============================================================
+// PROYECCIÓN DE COMPRAS Y PAGOS
+// ============================================================
+let purchases = [];
+const STORAGE_KEY = 'dehache_proyeccion_v2';
+
+function getMonday(d){
+  const date=new Date(d); const day=date.getDay();
+  date.setDate(date.getDate()-(day===0?6:day-1)); date.setHours(0,0,0,0); return date;
+}
+function addDays(d,n){ const r=new Date(d); r.setDate(r.getDate()+n); return r; }
+function weekKey(d){ return getMonday(d).toISOString().slice(0,10); }
+function weekLabel(monday){
+  const m=new Date(monday), s=addDays(m,6);
+  return `${pad(m.getDate())}/${pad(m.getMonth()+1)} – ${pad(s.getDate())}/${pad(s.getMonth()+1)}`;
+}
+function weekLabelLong(monday){
+  const m=new Date(monday), s=addDays(m,6);
+  const mes=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${pad(m.getDate())} ${mes[m.getMonth()]} – ${pad(s.getDate())} ${mes[s.getMonth()]}`;
+}
+function getWeeks(){
+  const weeks=[]; let cur=getMonday(new Date());
+  const end=new Date(2026,11,28);
+  while(cur<=end){ weeks.push(new Date(cur)); cur=addDays(cur,7); }
+  return weeks;
+}
+// Lunes de la semana de pago = lunes de semana de compra + plazo guardado en la compra
+function paymentMonday(p){
+  const plazo = p.plazo ?? termOf(p.supplier);
+  return getMonday(addDays(new Date(p.week), plazo));
+}
+function savePurchases(){ try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(purchases)); }catch(e){} }
+function loadPurchases(){ try{ purchases=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ purchases=[]; } }
+
+function getSupplierOptions(){
+  // Usa el listado completo de proveedores (incluyendo los sin deuda activa)
+  const base = Object.keys(allSuppliers).length > 0 ? allSuppliers : (() => {
+    const map={}; rawItems().forEach(i=>{ if(i.prov) map[i.prov]=termOf(i.prov); }); return map;
+  })();
+  return Object.entries(base).sort((a,b)=>a[0].localeCompare(b[0]));
+}
+
+// Actualiza los inputs de días de cheques al cambiar la cantidad
+function updateChequeInputs(){
+  const n=parseInt(document.getElementById('pj-ncheques')?.value)||0;
+  const cont=document.getElementById('pj-cheque-inputs');
+  if(!cont) return;
+  cont.innerHTML='';
+  for(let i=1;i<=n;i++){
+    const wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;align-items:center;gap:6px;margin-top:6px';
+    wrap.innerHTML=`<span style="font-size:.82rem;color:var(--ink-soft);white-space:nowrap">Cheque ${i}:</span>
+      <input id="pj-ch-${i}-dias" type="number" min="1" max="365" placeholder="días" style="width:90px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
+      <input id="pj-ch-${i}-monto" type="number" min="0" placeholder="monto (vacío=igual)" style="width:160px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">`;
+    cont.appendChild(wrap);
+  }
+}
+
+function renderProjection(){
+  const weeks=getWeeks();
+
+  // Mapas de pagos y cheques — usa p.plazo guardado en cada compra
+  const payMap={}; const chequeMap={};
+  weeks.forEach(w=>{ payMap[weekKey(w)]=[]; chequeMap[weekKey(w)]=[]; });
+  purchases.forEach(p=>{
+    const payMon=paymentMonday(p);
+    const pk=weekKey(payMon);
+    if(!payMap[pk]) payMap[pk]=[];
+    payMap[pk].push(p);
+    (p.cheques||[]).forEach(ch=>{
+      const ck=weekKey(addDays(payMon, ch.dias));
+      if(!chequeMap[ck]) chequeMap[ck]=[];
+      chequeMap[ck].push({...p, chequeAmount:ch.amount, chequeDias:ch.dias, payWeekLabel:weekLabel(payMon)});
+    });
+  });
+
+  // KPIs
+  const totalCompras=purchases.reduce((s,p)=>s+p.amount,0);
+  const totalCheques=purchases.reduce((s,p)=>s+(p.cheques||[]).reduce((a,c)=>a+c.amount,0),0);
+  const weeksWithPay=Object.values(payMap).filter(a=>a.length>0);
+  const maxSemana=weeksWithPay.length?Math.max(...weeksWithPay.map(a=>a.reduce((s,p)=>s+p.amount,0))):0;
+  const summary=`<div class="proj-summary">
+    <div class="proj-kpi blue"><div class="lbl">Compras planificadas</div><div class="val">${fmt.format(totalCompras)}</div></div>
+    <div class="proj-kpi red"><div class="lbl">Pagos a proveedores</div><div class="val">${fmt.format(totalCompras)}</div></div>
+    <div class="proj-kpi purple"><div class="lbl">Cheques a cubrir</div><div class="val">${fmt.format(totalCheques)}</div></div>
+    <div class="proj-kpi ink"><div class="lbl">Mayor pago semanal</div><div class="val">${fmt.format(maxSemana)}</div></div>
+  </div>`;
+
+  // Formulario — proveedor: texto libre con sugerencias; plazo: campo propio
+  const allProvNames=Object.keys(allSuppliers).sort((a,b)=>a.localeCompare(b));
+  const datalistOpts=allProvNames.map(p=>`<option value="${p.replace(/"/g,'&quot;')}">`).join('');
+  const weekOpts=weeks.map(w=>`<option value="${weekKey(w)}">${weekLabel(w)}</option>`).join('');
+  const addForm=`<div class="proj-add">
+    <div class="proj-add-title">➕ Agregar compra</div>
+    <div class="proj-add-row">
+      <input id="pj-prov" type="text" list="pj-prov-list" placeholder="Proveedor (escribí o elegí)" autocomplete="off"
+        style="min-width:260px" oninput="autoFillPlazo()">
+      <datalist id="pj-prov-list">${datalistOpts}</datalist>
+      <select id="pj-week">${weekOpts}</select>
+      <input id="pj-amt" type="number" min="0" step="1" placeholder="Monto total $">
+      <div style="display:flex;align-items:center;gap:6px">
+        <input id="pj-plazo" type="number" min="1" max="365" value="30" style="width:70px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
+        <span style="font-size:.8rem;color:var(--ink-soft);white-space:nowrap">días plazo</span>
+      </div>
+      <select id="pj-ncheques" onchange="updateChequeInputs()" style="min-width:150px">
+        <option value="0">Contado (sin cheques)</option>
+        <option value="1">1 cheque</option>
+        <option value="2">2 cheques</option>
+        <option value="3">3 cheques</option>
+        <option value="4">4 cheques</option>
+        <option value="5">5 cheques</option>
+        <option value="6">6 cheques</option>
+      </select>
+    </div>
+    <div id="pj-cheque-inputs" style="margin-top:6px;padding-left:2px">
+      <span style="font-size:.8rem;color:var(--ink-soft)">Seleccioná la cantidad de cheques para ingresar los plazos.</span>
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <button class="proj-btn" onclick="handleAddPurchase()">+ Agregar compra</button>
+      <span style="font-size:.77rem;color:var(--ink-soft)">El plazo ingresado se recuerda para el proveedor la próxima vez.</span>
+    </div>
+  </div>`;
+
+  // Tabla de compras
+  const compraRows=purchases.length===0
+    ?`<tr><td colspan="6" class="proj-empty">No hay compras ingresadas todavía.</td></tr>`
+    :purchases.slice().sort((a,b)=>a.week.localeCompare(b.week)).map(p=>{
+        const payMon=paymentMonday(p);
+        const plazo=p.plazo??termOf(p.supplier);
+        const chDesc=(p.cheques||[]).length===0
+          ?`<span style="color:var(--ink-soft);font-size:.8rem">contado</span>`
+          :(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">Ch.${i+1}: ${ch.dias}d · ${fmt.format(ch.amount)}</span>`).join('');
+        return `<tr>
+          <td><b>${p.supplier}</b><br><span class="tag-plazo">${plazo}d plazo</span></td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${weekLabel(new Date(p.week))}</td>
+          <td class="r imp">${fmt.format(p.amount)}</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--red)">${weekLabel(payMon)}</td>
+          <td>${chDesc}</td>
+          <td><button class="del-btn" onclick="deletePurchase('${p.id}')">✕</button></td>
+        </tr>`;}).join('');
+  const comprasSection=`<div class="proj-section">
+    <div class="proj-section-title">📋 Plan de Compras</div>
+    <table class="proj-table">
+      <thead><tr><th>Proveedor</th><th>Sem. compra</th><th class="r">Monto</th><th>Sem. pago</th><th>Cheques</th><th></th></tr></thead>
+      <tbody>${compraRows}</tbody>
+    </table>
+  </div>`;
+
+  // ---- Timeline unificado: pagos + cheques por semana ----
+  const allAmts=[
+    ...Object.values(payMap).flatMap(a=>a.map(p=>p.amount)),
+    ...Object.values(chequeMap).flatMap(a=>a.map(c=>c.chequeAmount))
+  ];
+  const maxAmt=Math.max(...allAmts,1);
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  const activeWeeks=weeks.filter(w=>{
+    const wk=weekKey(w);
+    return (payMap[wk]||[]).length>0 || (chequeMap[wk]||[]).length>0;
+  });
+
+  const tlCards=activeWeeks.map(w=>{
+    const wk=weekKey(w);
+    const pays=payMap[wk]||[], cheques=chequeMap[wk]||[];
+    const weekTotal=pays.reduce((s,p)=>s+p.amount,0)+cheques.reduce((s,c)=>s+c.chequeAmount,0);
+    const daysUntil=Math.round((w-today)/86400000);
+    const urgency=daysUntil<=7?'urgent':daysUntil<=30?'soon':'';
+    const badge=urgency==='urgent'?'<span class="tl-week-badge urgent">esta semana</span>'
+               :urgency==='soon'?'<span class="tl-week-badge soon">próxima</span>':'';
+
+    const payItems=pays.map(p=>`
+      <div class="tl-item tl-pay">
+        <div class="tl-icon">💳</div>
+        <div class="tl-info">
+          <div class="tl-supplier">${p.supplier}</div>
+          <div class="tl-sub">pago a proveedor · plazo ${termOf(p.supplier)}d</div>
+        </div>
+        <div class="tl-bar-wrap"><div class="tl-bar pay" style="width:${Math.round(p.amount/maxAmt*100)}%"></div></div>
+        <div class="tl-amt pay">${fmt.format(p.amount)}</div>
+      </div>`).join('');
+
+    const cheqItems=cheques.map(c=>`
+      <div class="tl-item tl-cheq">
+        <div class="tl-icon">🏦</div>
+        <div class="tl-info">
+          <div class="tl-supplier">${c.supplier}</div>
+          <div class="tl-sub">cheque a ${c.chequeDias}d · pago emitido ${c.payWeekLabel}</div>
+        </div>
+        <div class="tl-bar-wrap"><div class="tl-bar cheq" style="width:${Math.round(c.chequeAmount/maxAmt*100)}%"></div></div>
+        <div class="tl-amt cheq">${fmt.format(c.chequeAmount)}</div>
+      </div>`).join('');
+
+    return `<div class="tl-card ${urgency}">
+      <div class="tl-week-head">
+        <div class="tl-week-meta">
+          <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
+        </div>
+        <span class="tl-week-total">${fmt.format(weekTotal)}</span>
+      </div>
+      ${payItems}${cheqItems}
+    </div>`;
+  }).join('');
+
+  const timelineSection=`<div class="proj-section">
+    <div class="proj-section-title">📅 Calendario de Pagos y Cheques — semana a semana</div>
+    <div style="padding:14px 14px 4px">
+      <div style="display:flex;gap:16px;font-size:.77rem;color:var(--ink-soft);margin-bottom:12px">
+        <span><span style="display:inline-block;width:10px;height:10px;background:var(--red);border-radius:3px;margin-right:5px;vertical-align:middle"></span>Pago a proveedor</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#5b3aa0;border-radius:3px;margin-right:5px;vertical-align:middle"></span>Cheque a cubrir</span>
+      </div>
+      ${tlCards||'<div class="tl-empty">Agregá compras para ver el calendario de pagos y cheques</div>'}
+    </div>
+  </div>`;
+
+  document.getElementById('proj').innerHTML=summary+addForm+comprasSection+timelineSection;
+}
+
+// Auto-rellena el plazo cuando el usuario elige un proveedor conocido
+function autoFillPlazo(){
+  const prov=(document.getElementById('pj-prov')?.value||'').trim();
+  const plazoInput=document.getElementById('pj-plazo');
+  if(plazoInput && prov && terms[prov]) plazoInput.value=terms[prov];
+}
+
+function handleAddPurchase(){
+  const supplier=(document.getElementById('pj-prov').value||'').trim();
+  const week=document.getElementById('pj-week').value;
+  const amount=parseFloat(document.getElementById('pj-amt').value);
+  const plazo=parseInt(document.getElementById('pj-plazo').value)||DEFAULT_TERM;
+  const n=parseInt(document.getElementById('pj-ncheques').value)||0;
+  if(!supplier||!week||isNaN(amount)||amount<=0){
+    alert('Completá proveedor, semana y monto antes de agregar.'); return;
+  }
+  // Guardar el plazo para este proveedor (se auto-rellena la próxima vez)
+  terms[supplier]=plazo;
+  savePlazos();
+  const cheques=[];
+  if(n>0){
+    let montoIngresado=0;
+    for(let i=1;i<=n;i++){
+      const dias=parseInt(document.getElementById(`pj-ch-${i}-dias`)?.value)||0;
+      if(dias<=0){ alert(`Ingresá los días del cheque ${i}.`); return; }
+      const montoInput=parseFloat(document.getElementById(`pj-ch-${i}-monto`)?.value);
+      cheques.push({dias, amount:isNaN(montoInput)||montoInput<=0 ? 0 : montoInput});
+      montoIngresado+=cheques[i-1].amount;
+    }
+    // Si no se ingresaron montos o no cierran, distribuir en partes iguales
+    const sinMonto=cheques.every(c=>c.amount===0);
+    if(sinMonto){
+      const base=Math.floor(amount/n);
+      cheques.forEach((c,i)=>{ c.amount = i===n-1 ? amount-base*(n-1) : base; });
+    } else if(Math.abs(montoIngresado-amount)>1){
+      if(!confirm(`La suma de los cheques (${fmt.format(montoIngresado)}) difiere del monto total (${fmt.format(amount)}). ¿Continuás igual?`)) return;
+    }
+  }
+  purchases.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),supplier,week,amount,plazo,cheques});
+  savePurchases(); renderProjection();
+}
+function deletePurchase(id){
+  if(!confirm('¿Eliminar esta compra?')) return;
+  purchases=purchases.filter(p=>p.id!==id);
+  savePurchases(); renderProjection();
+}
+loadPurchases();
+
+// ============================================================
 document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value;render();});
 document.getElementById('sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
-  state.tab=b.dataset.tab; document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b)); render(); });
+  state.tab=b.dataset.tab;
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  const isProj=state.tab==='proyeccion';
+  document.getElementById('app').classList.toggle('hidden',isProj);
+  document.getElementById('proj').classList.toggle('hidden',!isProj);
+  if(isProj) renderProjection(); else render();
+});
 
 init();
 </script>

@@ -141,7 +141,19 @@
   .tl-card:hover{border-color:#cdd2e0;box-shadow:var(--shadow)}
   .tl-card.urgent{border-left:4px solid var(--red)}
   .tl-card.soon{border-left:4px solid #d99a3e}
-  .tl-week-head{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;background:var(--bg-tint);border-bottom:1px solid var(--line-soft);gap:12px}
+  .tl-week-head{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;background:var(--bg-tint);border-bottom:1px solid var(--line-soft);gap:12px;cursor:pointer;user-select:none}
+  .tl-week-head:hover{background:#eef0f6}
+  .tl-chev{display:inline-block;font-size:.75rem;margin-right:6px;transition:.2s;color:var(--ink-soft)}
+  .tl-card.open .tl-chev{transform:rotate(90deg)}
+  .tl-body{display:none}
+  .tl-card.open .tl-body{display:block}
+  .tl-week-summary{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .tl-sum-pay{font-size:.82rem;font-weight:700;color:var(--red)}
+  .tl-sum-cheq{font-size:.82rem;font-weight:700;color:#5b3aa0}
+  .edit-btn{font:inherit;font-size:.73rem;background:var(--blue-bg);color:var(--blue-2);border:1px solid rgba(0,34,106,.15);padding:3px 9px;border-radius:7px;cursor:pointer;font-weight:700}
+  .edit-btn:hover{background:#d4e4f5}
+  .form-editing{background:#fff8e8;border-color:#e6c84a!important}
+  .form-editing .proj-add-title{color:var(--amber,#c8762a)}
   .tl-week-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .tl-week-label{font-family:'Archivo',sans-serif;font-weight:700;font-size:.95rem;color:var(--ink)}
   .tl-week-badge{font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.08em}
@@ -575,6 +587,7 @@ function render(){
 // PROYECCIÓN DE COMPRAS Y PAGOS
 // ============================================================
 let purchases = [];
+let editingId  = null;   // id de la compra que se está editando (null = modo agregar)
 const STORAGE_KEY = 'dehache_proyeccion_v2';
 
 function getMonday(d){
@@ -615,8 +628,8 @@ function getSupplierOptions(){
 }
 
 // Actualiza los inputs de días de cheques al cambiar la cantidad
-function updateChequeInputs(){
-  const n=parseInt(document.getElementById('pj-ncheques')?.value)||0;
+function updateChequeInputs(defaultN){
+  const n=defaultN!==undefined ? defaultN : (parseInt(document.getElementById('pj-ncheques')?.value)||0);
   const cont=document.getElementById('pj-cheque-inputs');
   if(!cont) return;
   cont.innerHTML='';
@@ -663,35 +676,41 @@ function renderProjection(){
   // Formulario — proveedor: texto libre con sugerencias; plazo: campo propio
   const allProvNames=Object.keys(allSuppliers).sort((a,b)=>a.localeCompare(b));
   const datalistOpts=allProvNames.map(p=>`<option value="${p.replace(/"/g,'&quot;')}">`).join('');
-  const weekOpts=weeks.map(w=>`<option value="${weekKey(w)}">${weekLabel(w)}</option>`).join('');
-  const addForm=`<div class="proj-add">
-    <div class="proj-add-title">➕ Agregar compra</div>
+  const isEditing = editingId !== null;
+  const editP = isEditing ? purchases.find(p=>p.id===editingId) : null;
+  const weekOpts=weeks.map(w=>`<option value="${weekKey(w)}"${editP&&weekKey(w)===editP.week?' selected':''}>` +
+    `${weekLabel(w)}</option>`).join('');
+  const addForm=`<div class="proj-add${isEditing?' form-editing':''}">
+    <div class="proj-add-title">${isEditing?'✏️ Editando compra':'➕ Agregar compra'}</div>
     <div class="proj-add-row">
-      <input id="pj-prov" type="text" list="pj-prov-list" placeholder="Proveedor (escribí o elegí)" autocomplete="off"
-        style="min-width:260px" oninput="autoFillPlazo()">
+      <input id="pj-prov" type="text" list="pj-prov-list"
+        placeholder="Proveedor (escribí o elegí)" autocomplete="off"
+        style="min-width:260px" oninput="autoFillPlazo()"
+        value="${editP?editP.supplier.replace(/"/g,'&quot;'):''}">
       <datalist id="pj-prov-list">${datalistOpts}</datalist>
       <select id="pj-week">${weekOpts}</select>
-      <input id="pj-amt" type="number" min="0" step="1" placeholder="Monto total $">
+      <input id="pj-amt" type="number" min="0" step="1" placeholder="Monto total $"
+        value="${editP?editP.amount:''}">
       <div style="display:flex;align-items:center;gap:6px">
-        <input id="pj-plazo" type="number" min="1" max="365" value="30" style="width:70px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
+        <input id="pj-plazo" type="number" min="1" max="365"
+          value="${editP?editP.plazo:30}"
+          style="width:70px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;
+            font-size:.9rem;padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
         <span style="font-size:.8rem;color:var(--ink-soft);white-space:nowrap">días plazo</span>
       </div>
-      <select id="pj-ncheques" onchange="updateChequeInputs()" style="min-width:150px">
-        <option value="0">Contado (sin cheques)</option>
-        <option value="1">1 cheque</option>
-        <option value="2">2 cheques</option>
-        <option value="3">3 cheques</option>
-        <option value="4">4 cheques</option>
-        <option value="5">5 cheques</option>
-        <option value="6">6 cheques</option>
+      <select id="pj-ncheques" onchange="updateChequeInputs(${editP?editP.cheques.length:0})" style="min-width:150px">
+        ${[0,1,2,3,4,5,6].map(n=>`<option value="${n}"${editP&&editP.cheques.length===n?' selected':''}>${n===0?'Contado (sin cheques)':n+' cheque'+(n>1?'s':'')}</option>`).join('')}
       </select>
     </div>
     <div id="pj-cheque-inputs" style="margin-top:6px;padding-left:2px">
       <span style="font-size:.8rem;color:var(--ink-soft)">Seleccioná la cantidad de cheques para ingresar los plazos.</span>
     </div>
-    <div style="margin-top:12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-      <button class="proj-btn" onclick="handleAddPurchase()">+ Agregar compra</button>
-      <span style="font-size:.77rem;color:var(--ink-soft)">El plazo ingresado se recuerda para el proveedor la próxima vez.</span>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <button class="proj-btn" onclick="handleAddPurchase()">
+        ${isEditing?'💾 Guardar cambios':'+ Agregar compra'}
+      </button>
+      ${isEditing?`<button onclick="cancelEdit()" style="font:inherit;font-size:.88rem;font-weight:600;padding:10px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer;color:var(--ink-soft)">✕ Cancelar</button>`:''}
+      <span style="font-size:.77rem;color:var(--ink-soft)">${isEditing?'Modificá los campos y guardá.':'El plazo ingresado se recuerda para el proveedor la próxima vez.'}</span>
     </div>
   </div>`;
 
@@ -701,16 +720,20 @@ function renderProjection(){
     :purchases.slice().sort((a,b)=>a.week.localeCompare(b.week)).map(p=>{
         const payMon=paymentMonday(p);
         const plazo=p.plazo??termOf(p.supplier);
+        const isBeingEdited = p.id===editingId;
         const chDesc=(p.cheques||[]).length===0
           ?`<span style="color:var(--ink-soft);font-size:.8rem">contado</span>`
           :(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">Ch.${i+1}: ${ch.dias}d · ${fmt.format(ch.amount)}</span>`).join('');
-        return `<tr>
+        return `<tr style="${isBeingEdited?'background:#fff8e8;':''}">
           <td><b>${p.supplier}</b><br><span class="tag-plazo">${plazo}d plazo</span></td>
           <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${weekLabel(new Date(p.week))}</td>
           <td class="r imp">${fmt.format(p.amount)}</td>
           <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--red)">${weekLabel(payMon)}</td>
           <td>${chDesc}</td>
-          <td><button class="del-btn" onclick="deletePurchase('${p.id}')">✕</button></td>
+          <td style="display:flex;gap:5px">
+            <button class="edit-btn" onclick="startEdit('${p.id}')">✎</button>
+            <button class="del-btn" onclick="deletePurchase('${p.id}')">✕</button>
+          </td>
         </tr>`;}).join('');
   const comprasSection=`<div class="proj-section">
     <div class="proj-section-title">📋 Plan de Compras</div>
@@ -736,25 +759,26 @@ function renderProjection(){
   const tlCards=activeWeeks.map(w=>{
     const wk=weekKey(w);
     const pays=payMap[wk]||[], cheques=chequeMap[wk]||[];
-    const weekTotal=pays.reduce((s,p)=>s+p.amount,0)+cheques.reduce((s,c)=>s+c.chequeAmount,0);
+    const payTotal=pays.reduce((s,p)=>s+p.amount,0);
+    const cheqTotal=cheques.reduce((s,c)=>s+c.chequeAmount,0);
+    const weekTotal=payTotal+cheqTotal;
     const daysUntil=Math.round((w-today)/86400000);
     const urgency=daysUntil<=7?'urgent':daysUntil<=30?'soon':'';
-    const badge=urgency==='urgent'?'<span class="tl-week-badge urgent">esta semana</span>'
-               :urgency==='soon'?'<span class="tl-week-badge soon">próxima</span>':'';
+    const badge=urgency?`<span class="tl-badge ${urgency}">${urgency==='urgent'?'esta semana':'próxima'}</span>`:'';
 
     const payItems=pays.map(p=>`
-      <div class="tl-item tl-pay">
+      <div class="tl-item pay">
         <div class="tl-icon">💳</div>
         <div class="tl-info">
           <div class="tl-supplier">${p.supplier}</div>
-          <div class="tl-sub">pago a proveedor · plazo ${termOf(p.supplier)}d</div>
+          <div class="tl-sub">pago a proveedor · plazo ${p.plazo??termOf(p.supplier)} días</div>
         </div>
         <div class="tl-bar-wrap"><div class="tl-bar pay" style="width:${Math.round(p.amount/maxAmt*100)}%"></div></div>
         <div class="tl-amt pay">${fmt.format(p.amount)}</div>
       </div>`).join('');
 
     const cheqItems=cheques.map(c=>`
-      <div class="tl-item tl-cheq">
+      <div class="tl-item cheq">
         <div class="tl-icon">🏦</div>
         <div class="tl-info">
           <div class="tl-supplier">${c.supplier}</div>
@@ -765,13 +789,18 @@ function renderProjection(){
       </div>`).join('');
 
     return `<div class="tl-card ${urgency}">
-      <div class="tl-week-head">
+      <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
         <div class="tl-week-meta">
+          <span class="tl-chev">▶</span>
           <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
+        </div>
+        <div class="tl-week-summary">
+          ${payTotal>0?`<span class="tl-sum-pay">💳 ${fmt.format(payTotal)}</span>`:''}
+          ${cheqTotal>0?`<span class="tl-sum-cheq">🏦 ${fmt.format(cheqTotal)}</span>`:''}
         </div>
         <span class="tl-week-total">${fmt.format(weekTotal)}</span>
       </div>
-      ${payItems}${cheqItems}
+      <div class="tl-body">${payItems}${cheqItems}</div>
     </div>`;
   }).join('');
 
@@ -796,6 +825,29 @@ function autoFillPlazo(){
   if(plazoInput && prov && terms[prov]) plazoInput.value=terms[prov];
 }
 
+function startEdit(id){
+  editingId=id;
+  const p=purchases.find(x=>x.id===id);
+  renderProjection();
+  // Pre-cargar inputs de cheques si los tiene
+  if(p && (p.cheques||[]).length>0){
+    updateChequeInputs(p.cheques.length);
+    p.cheques.forEach((ch,i)=>{
+      const dEl=document.getElementById(`pj-ch-${i+1}-dias`);
+      const mEl=document.getElementById(`pj-ch-${i+1}-monto`);
+      if(dEl) dEl.value=ch.dias;
+      if(mEl) mEl.value=ch.amount;
+    });
+  }
+  // Scroll al formulario
+  document.querySelector('.proj-add')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function cancelEdit(){
+  editingId=null;
+  renderProjection();
+}
+
 function handleAddPurchase(){
   const supplier=(document.getElementById('pj-prov').value||'').trim();
   const week=document.getElementById('pj-week').value;
@@ -805,9 +857,7 @@ function handleAddPurchase(){
   if(!supplier||!week||isNaN(amount)||amount<=0){
     alert('Completá proveedor, semana y monto antes de agregar.'); return;
   }
-  // Guardar el plazo para este proveedor (se auto-rellena la próxima vez)
-  terms[supplier]=plazo;
-  savePlazos();
+  terms[supplier]=plazo; savePlazos();
   const cheques=[];
   if(n>0){
     let montoIngresado=0;
@@ -815,19 +865,25 @@ function handleAddPurchase(){
       const dias=parseInt(document.getElementById(`pj-ch-${i}-dias`)?.value)||0;
       if(dias<=0){ alert(`Ingresá los días del cheque ${i}.`); return; }
       const montoInput=parseFloat(document.getElementById(`pj-ch-${i}-monto`)?.value);
-      cheques.push({dias, amount:isNaN(montoInput)||montoInput<=0 ? 0 : montoInput});
+      cheques.push({dias, amount:isNaN(montoInput)||montoInput<=0?0:montoInput});
       montoIngresado+=cheques[i-1].amount;
     }
-    // Si no se ingresaron montos o no cierran, distribuir en partes iguales
     const sinMonto=cheques.every(c=>c.amount===0);
     if(sinMonto){
       const base=Math.floor(amount/n);
-      cheques.forEach((c,i)=>{ c.amount = i===n-1 ? amount-base*(n-1) : base; });
+      cheques.forEach((c,i)=>{ c.amount=i===n-1?amount-base*(n-1):base; });
     } else if(Math.abs(montoIngresado-amount)>1){
-      if(!confirm(`La suma de los cheques (${fmt.format(montoIngresado)}) difiere del monto total (${fmt.format(amount)}). ¿Continuás igual?`)) return;
+      if(!confirm(`La suma de los cheques (${fmt.format(montoIngresado)}) difiere del total (${fmt.format(amount)}). ¿Continuás?`)) return;
     }
   }
-  purchases.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),supplier,week,amount,plazo,cheques});
+  if(editingId){
+    // Actualizar compra existente
+    const idx=purchases.findIndex(p=>p.id===editingId);
+    if(idx>=0) purchases[idx]={...purchases[idx],supplier,week,amount,plazo,cheques};
+    editingId=null;
+  } else {
+    purchases.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),supplier,week,amount,plazo,cheques});
+  }
   savePurchases(); renderProjection();
 }
 function deletePurchase(id){

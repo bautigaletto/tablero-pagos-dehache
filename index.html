@@ -752,22 +752,29 @@ function renderProjection(){
   const maxAmt=Math.max(...allAmts,1);
   const today=new Date(); today.setHours(0,0,0,0);
 
-  const activeWeeks=weeks.filter(w=>{
-    const wk=weekKey(w);
-    return (payMap[wk]||[]).length>0 || (chequeMap[wk]||[]).length>0;
-  });
-
-  const tlCards=activeWeeks.map(w=>{
-    const wk=weekKey(w);
-    const pays=payMap[wk]||[], cheques=chequeMap[wk]||[];
-    const payTotal=pays.reduce((s,p)=>s+p.amount,0);
-    const cheqTotal=cheques.reduce((s,c)=>s+c.chequeAmount,0);
-    const weekTotal=payTotal+cheqTotal;
+  // ---- Helper para generar tarjetas colapsables por semana ----
+  function makeWeekCard(w, items, renderItem, urgencyClass){
     const daysUntil=Math.round((w-today)/86400000);
-    const urgency=daysUntil<=7?'urgent':daysUntil<=30?'soon':'';
+    const urgency=urgencyClass||(daysUntil<=7?'urgent':daysUntil<=30?'soon':'');
     const badge=urgency?`<span class="tl-badge ${urgency}">${urgency==='urgent'?'esta semana':'próxima'}</span>`:'';
+    const total=items.reduce((s,x)=>s+(x.amount||x.chequeAmount||0),0);
+    const body=items.map(renderItem).join('');
+    return `<div class="tl-card ${urgency}">
+      <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
+        <div class="tl-week-meta"><span class="tl-chev">▶</span>
+          <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
+        </div>
+        <span class="tl-week-total">${fmt.format(total)}</span>
+      </div>
+      <div class="tl-body">${body}</div>
+    </div>`;
+  }
 
-    const payItems=pays.map(p=>`
+  // Sección pagos a proveedores
+  const payWeeks=weeks.filter(w=>(payMap[weekKey(w)]||[]).length>0);
+  const payCards=payWeeks.map(w=>{
+    const pays=payMap[weekKey(w)];
+    return makeWeekCard(w, pays, p=>`
       <div class="tl-item pay">
         <div class="tl-icon">💳</div>
         <div class="tl-info">
@@ -776,9 +783,21 @@ function renderProjection(){
         </div>
         <div class="tl-bar-wrap"><div class="tl-bar pay" style="width:${Math.round(p.amount/maxAmt*100)}%"></div></div>
         <div class="tl-amt pay">${fmt.format(p.amount)}</div>
-      </div>`).join('');
+      </div>`);
+  }).join('');
 
-    const cheqItems=cheques.map(c=>`
+  const pagosSection=`<div class="proj-section">
+    <div class="proj-section-title" style="color:var(--red)">💳 Pagos a Proveedores — semana a semana</div>
+    <div style="padding:12px 14px 4px">
+      ${payCards||'<div class="tl-empty">No hay pagos proyectados todavía.</div>'}
+    </div>
+  </div>`;
+
+  // Sección cheques a cubrir
+  const cheqWeeks=weeks.filter(w=>(chequeMap[weekKey(w)]||[]).length>0);
+  const cheqCards=cheqWeeks.map(w=>{
+    const cheques=chequeMap[weekKey(w)];
+    return makeWeekCard(w, cheques, c=>`
       <div class="tl-item cheq">
         <div class="tl-icon">🏦</div>
         <div class="tl-info">
@@ -787,56 +806,37 @@ function renderProjection(){
         </div>
         <div class="tl-bar-wrap"><div class="tl-bar cheq" style="width:${Math.round(c.chequeAmount/maxAmt*100)}%"></div></div>
         <div class="tl-amt cheq">${fmt.format(c.chequeAmount)}</div>
-      </div>`).join('');
-
-    return `<div class="tl-card ${urgency}">
-      <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
-        <div class="tl-week-meta">
-          <span class="tl-chev">▶</span>
-          <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
-        </div>
-        <div class="tl-week-summary">
-          ${payTotal>0?`<span class="tl-sum-pay">💳 ${fmt.format(payTotal)}</span>`:''}
-          ${cheqTotal>0?`<span class="tl-sum-cheq">🏦 ${fmt.format(cheqTotal)}</span>`:''}
-        </div>
-        <span class="tl-week-total">${fmt.format(weekTotal)}</span>
-      </div>
-      <div class="tl-body">${payItems}${cheqItems}</div>
-    </div>`;
+      </div>`);
   }).join('');
 
-  const timelineSection=`<div class="proj-section">
-    <div class="proj-section-title">📅 Calendario de Pagos y Cheques — semana a semana</div>
-    <div style="padding:14px 14px 4px">
-      <div style="display:flex;gap:16px;font-size:.77rem;color:var(--ink-soft);margin-bottom:12px">
-        <span><span style="display:inline-block;width:10px;height:10px;background:var(--red);border-radius:3px;margin-right:5px;vertical-align:middle"></span>Pago a proveedor</span>
-        <span><span style="display:inline-block;width:10px;height:10px;background:#5b3aa0;border-radius:3px;margin-right:5px;vertical-align:middle"></span>Cheque a cubrir</span>
-      </div>
-      ${tlCards||'<div class="tl-empty">Agregá compras para ver el calendario de pagos y cheques</div>'}
+  const chequesSection=`<div class="proj-section">
+    <div class="proj-section-title" style="color:#5b3aa0">🏦 Cheques a Cubrir — semana a semana</div>
+    <div style="padding:12px 14px 4px">
+      ${cheqCards||'<div class="tl-empty">No hay cheques a cubrir todavía.</div>'}
     </div>
   </div>`;
 
-  // ---- Facturas pendientes de planificar (de F1/F2) ----
+  // ---- Facturas POR VENCER de F1/F2 (de ahora en adelante) ----
   const allItems=rawItems();
   const byProv={};
   allItems.forEach(i=>{
     if(!i.prov||i.saldo<=0) return;
-    if(!byProv[i.prov]) byProv[i.prov]={prov:i.prov,total:0,maxDias:0,vencido:false};
+    if(isVencido(i)||esCredito(i)) return;   // solo las que NO están vencidas
+    if(!byProv[i.prov]) byProv[i.prov]={prov:i.prov,total:0,minDias:999};
     byProv[i.prov].total+=i.saldo;
-    byProv[i.prov].maxDias=Math.max(byProv[i.prov].maxDias,i.dias);
-    if(isVencidoFactura(i)) byProv[i.prov].vencido=true;
+    byProv[i.prov].minDias=Math.min(byProv[i.prov].minDias,i.dias);
   });
   const pendientes=Object.values(byProv)
     .filter(s=>s.total>0)
-    .sort((a,b)=> b.vencido-a.vencido || b.total-a.total);
+    .sort((a,b)=> b.minDias-a.minDias || b.total-a.total);
 
   const pendRows=pendientes.length===0
-    ?'<div class="proj-empty">No hay facturas pendientes en F1/F2.</div>'
+    ?'<div class="proj-empty">No hay facturas por vencer en F1/F2 sin planificar.</div>'
     :pendientes.map(s=>`
       <tr>
         <td><b>${s.prov}</b></td>
-        <td class="r imp" style="color:${s.vencido?'var(--red)':'var(--ink)'}">${fmt.format(s.total)}</td>
-        <td><span class="tag-plazo ${s.vencido?'tag-plazo-red':''}">${s.maxDias}d ${s.vencido?'vencido':'antig.'}</span></td>
+        <td class="r imp">${fmt.format(s.total)}</td>
+        <td><span class="tag-plazo">${s.minDias}d más próxima</span></td>
         <td><button class="proj-btn" style="padding:5px 12px;font-size:.8rem"
           onclick="prefillAdd('${s.prov.replace(/'/g,"\\'")}',${Math.round(s.total)})">
           ➕ Planificar
@@ -844,11 +844,11 @@ function renderProjection(){
       </tr>`).join('');
 
   const pendientesSection=`<div class="proj-section">
-    <div class="proj-section-title">📥 Facturas pendientes de planificar
-      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">desde F1 y F2 · click en "Planificar" para pre-cargar el formulario</span>
+    <div class="proj-section-title">📥 Facturas por vencer — planificá el pago
+      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">solo las que aún no vencieron · click en "Planificar" para pre-cargar el formulario</span>
     </div>
     <table class="proj-table">
-      <thead><tr><th>Proveedor</th><th class="r">Deuda actual</th><th>Antigüedad</th><th></th></tr></thead>
+      <thead><tr><th>Proveedor</th><th class="r">Monto a pagar</th><th>Próximo vto.</th><th></th></tr></thead>
       <tbody>${pendRows}</tbody>
     </table>
   </div>`;
@@ -862,7 +862,7 @@ function renderProjection(){
     </button>
   </div>`;
 
-  document.getElementById('proj').innerHTML=backBtn+summary+pendientesSection+addForm+comprasSection+timelineSection;
+  document.getElementById('proj').innerHTML=backBtn+summary+pendientesSection+addForm+comprasSection+pagosSection+chequesSection;
 }
 
 // Auto-rellena el plazo cuando el usuario elige un proveedor conocido

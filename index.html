@@ -757,7 +757,7 @@ function renderProjection(){
     const daysUntil=Math.round((w-today)/86400000);
     const urgency=urgencyClass||(daysUntil<=7?'urgent':daysUntil<=30?'soon':'');
     const badge=urgency?`<span class="tl-badge ${urgency}">${urgency==='urgent'?'esta semana':'próxima'}</span>`:'';
-    const total=items.reduce((s,x)=>s+(x.amount||x.chequeAmount||0),0);
+    const total=items.reduce((s,x)=>s+(x.chequeAmount??x.amount??0),0);
     const body=items.map(renderItem).join('');
     return `<div class="tl-card ${urgency}">
       <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">

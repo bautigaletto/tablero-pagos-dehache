@@ -203,6 +203,7 @@
   .cheque-chip{display:inline-flex;align-items:center;gap:5px;background:#f5f0fb;border:1px solid #d9c8f0;border-radius:8px;padding:3px 9px;margin:2px 3px 2px 0;font-size:.81rem}
   .cheque-chip b{color:#5b3aa0;font-weight:700}
   .tag-plazo{display:inline-block;font-size:.67rem;font-weight:700;padding:1px 7px;border-radius:5px;background:var(--blue-bg);color:var(--blue-2);margin-top:2px}
+  .tag-plazo-red{background:var(--red-bg)!important;color:var(--red)!important}
   .proj-kpi.purple::before{background:#5b3aa0}
   .proj-empty{padding:28px 18px;color:var(--ink-soft);text-align:center;font-size:.88rem}
   .wcell{white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;color:var(--ink-soft);min-width:130px}
@@ -698,7 +699,7 @@ function renderProjection(){
             font-size:.9rem;padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
         <span style="font-size:.8rem;color:var(--ink-soft);white-space:nowrap">días plazo</span>
       </div>
-      <select id="pj-ncheques" onchange="updateChequeInputs(${editP?editP.cheques.length:0})" style="min-width:150px">
+      <select id="pj-ncheques" onchange="updateChequeInputs(parseInt(this.value))" style="min-width:150px">
         ${[0,1,2,3,4,5,6].map(n=>`<option value="${n}"${editP&&editP.cheques.length===n?' selected':''}>${n===0?'Contado (sin cheques)':n+' cheque'+(n>1?'s':'')}</option>`).join('')}
       </select>
     </div>
@@ -815,7 +816,53 @@ function renderProjection(){
     </div>
   </div>`;
 
-  document.getElementById('proj').innerHTML=summary+addForm+comprasSection+timelineSection;
+  // ---- Facturas pendientes de planificar (de F1/F2) ----
+  const allItems=rawItems();
+  const byProv={};
+  allItems.forEach(i=>{
+    if(!i.prov||i.saldo<=0) return;
+    if(!byProv[i.prov]) byProv[i.prov]={prov:i.prov,total:0,maxDias:0,vencido:false};
+    byProv[i.prov].total+=i.saldo;
+    byProv[i.prov].maxDias=Math.max(byProv[i.prov].maxDias,i.dias);
+    if(isVencidoFactura(i)) byProv[i.prov].vencido=true;
+  });
+  const pendientes=Object.values(byProv)
+    .filter(s=>s.total>0)
+    .sort((a,b)=> b.vencido-a.vencido || b.total-a.total);
+
+  const pendRows=pendientes.length===0
+    ?'<div class="proj-empty">No hay facturas pendientes en F1/F2.</div>'
+    :pendientes.map(s=>`
+      <tr>
+        <td><b>${s.prov}</b></td>
+        <td class="r imp" style="color:${s.vencido?'var(--red)':'var(--ink)'}">${fmt.format(s.total)}</td>
+        <td><span class="tag-plazo ${s.vencido?'tag-plazo-red':''}">${s.maxDias}d ${s.vencido?'vencido':'antig.'}</span></td>
+        <td><button class="proj-btn" style="padding:5px 12px;font-size:.8rem"
+          onclick="prefillAdd('${s.prov.replace(/'/g,"\\'")}',${Math.round(s.total)})">
+          ➕ Planificar
+        </button></td>
+      </tr>`).join('');
+
+  const pendientesSection=`<div class="proj-section">
+    <div class="proj-section-title">📥 Facturas pendientes de planificar
+      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">desde F1 y F2 · click en "Planificar" para pre-cargar el formulario</span>
+    </div>
+    <table class="proj-table">
+      <thead><tr><th>Proveedor</th><th class="r">Deuda actual</th><th>Antigüedad</th><th></th></tr></thead>
+      <tbody>${pendRows}</tbody>
+    </table>
+  </div>`;
+
+  // ---- Back button ----
+  const backBtn=`<div style="margin-bottom:14px">
+    <button onclick="switchToDebt()" style="font:inherit;font-size:.84rem;font-weight:600;
+      color:var(--blue);background:var(--blue-bg);border:1px solid rgba(0,34,106,.15);
+      border-radius:10px;padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px">
+      ← Volver a cuentas a pagar
+    </button>
+  </div>`;
+
+  document.getElementById('proj').innerHTML=backBtn+summary+pendientesSection+addForm+comprasSection+timelineSection;
 }
 
 // Auto-rellena el plazo cuando el usuario elige un proveedor conocido
@@ -846,6 +893,25 @@ function startEdit(id){
 function cancelEdit(){
   editingId=null;
   renderProjection();
+}
+
+// Pre-carga el formulario con datos de una factura de F1/F2
+function prefillAdd(supplier, amount){
+  editingId=null;
+  renderProjection();
+  setTimeout(()=>{
+    const provEl=document.getElementById('pj-prov');
+    const amtEl=document.getElementById('pj-amt');
+    if(provEl){ provEl.value=supplier; autoFillPlazo(); }
+    if(amtEl) amtEl.value=amount;
+    document.querySelector('.proj-add')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+  },50);
+}
+
+// Vuelve a la vista de cuentas a pagar (tab Por vencer)
+function switchToDebt(){
+  const btn=document.querySelector('#tabs button[data-tab="porvencer"]');
+  if(btn) btn.click();
 }
 
 function handleAddPurchase(){

@@ -1,0 +1,331 @@
+{
+  "updated": "2026-07-23T12:27:52.571Z",
+  "purchases": [
+    {
+      "id": "mrwcg5nicq6fb72x5j8",
+      "supplier": "SAINT-GOBAIN ARGENTINA S.A",
+      "week": "2026-07-20",
+      "amount": 25000000,
+      "plazo": 30,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 12500000
+        },
+        {
+          "dias": 60,
+          "amount": 12500000
+        }
+      ]
+    },
+    {
+      "id": "mrwch0pxw42ibdl9r7s",
+      "supplier": "SAINT-GOBAIN ARGENTINA SA",
+      "week": "2026-07-20",
+      "amount": 20000000,
+      "plazo": 30,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 10000000
+        },
+        {
+          "dias": 60,
+          "amount": 10000000
+        }
+      ]
+    },
+    {
+      "id": "mrwchrb1ayr1gzxkgdh",
+      "supplier": "FERRUM S.A",
+      "week": "2026-07-20",
+      "amount": 10000000,
+      "plazo": 30,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 5000000
+        },
+        {
+          "dias": 60,
+          "amount": 5000000
+        }
+      ]
+    },
+    {
+      "id": "mrwcjbr8laak1z9iyxg",
+      "supplier": "FERRUM S.A",
+      "week": "2026-07-20",
+      "amount": 20000000,
+      "plazo": 30,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 5000000
+        },
+        {
+          "dias": 60,
+          "amount": 5000000
+        },
+        {
+          "dias": 90,
+          "amount": 5000000
+        },
+        {
+          "dias": 120,
+          "amount": 5000000
+        }
+      ]
+    },
+    {
+      "id": "mrwcm5x6bmww56vyqm7",
+      "supplier": "SAINT-GOBAIN ARGENTINA SA",
+      "week": "2026-07-27",
+      "amount": 25000000,
+      "plazo": 30,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 8000000
+        },
+        {
+          "dias": 45,
+          "amount": 8000000
+        },
+        {
+          "dias": 60,
+          "amount": 9000000
+        }
+      ]
+    },
+    {
+      "id": "mrwcq4cw5fonbsw9yf3",
+      "supplier": "BUILDING TRUST",
+      "week": "2026-07-27",
+      "amount": 10000000,
+      "plazo": 20,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 5000000
+        },
+        {
+          "dias": 60,
+          "amount": 5000000
+        }
+      ]
+    },
+    {
+      "id": "mrwge0fhjg96sjwyks",
+      "supplier": "ALUMANTA",
+      "week": "2026-07-27",
+      "amount": 15000000,
+      "plazo": 10,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 7500000
+        },
+        {
+          "dias": 60,
+          "amount": 7500000
+        }
+      ]
+    },
+    {
+      "id": "mrxfr94k1ext3cqashv",
+      "supplier": "SAINT-GOBAIN ARGENTINA SA",
+      "week": "2026-08-03",
+      "amount": 25000000,
+      "plazo": 40,
+      "cheques": [
+        {
+          "dias": 20,
+          "amount": 4000000
+        },
+        {
+          "dias": 30,
+          "amount": 4000000
+        },
+        {
+          "dias": 45,
+          "amount": 4000000
+        },
+        {
+          "dias": 40,
+          "amount": 4000000
+        },
+        {
+          "dias": 50,
+          "amount": 4000000
+        },
+        {
+          "dias": 60,
+          "amount": 5000000
+        }
+      ]
+    },
+    {
+      "id": "mrxfw5funanp5wn6ltp",
+      "supplier": "EL ALBAÑIL - RAPISEC",
+      "week": "2026-08-03",
+      "amount": 10000000,
+      "plazo": 30,
+      "cheques": [
+        {
+          "dias": 20,
+          "amount": 2500000
+        },
+        {
+          "dias": 35,
+          "amount": 2500000
+        },
+        {
+          "dias": 45,
+          "amount": 2500000
+        },
+        {
+          "dias": 60,
+          "amount": 2500000
+        }
+      ]
+    },
+    {
+      "id": "mrxfzghd2smvt4evllv",
+      "supplier": "SAINT-GOBAIN ARGENTINA SA",
+      "week": "2026-08-10",
+      "amount": 20000000,
+      "plazo": 40,
+      "cheques": [
+        {
+          "dias": 20,
+          "amount": 4000000
+        },
+        {
+          "dias": 30,
+          "amount": 4000000
+        },
+        {
+          "dias": 40,
+          "amount": 4000000
+        },
+        {
+          "dias": 50,
+          "amount": 4000000
+        },
+        {
+          "dias": 60,
+          "amount": 4000000
+        }
+      ]
+    },
+    {
+      "id": "mrxg1k1gjc803jj6kob",
+      "supplier": "SAINT-GOBAIN ARGENTINA SA",
+      "week": "2026-08-10",
+      "amount": 25000000,
+      "plazo": 40,
+      "cheques": [
+        {
+          "dias": 20,
+          "amount": 5000000
+        },
+        {
+          "dias": 30,
+          "amount": 5000000
+        },
+        {
+          "dias": 40,
+          "amount": 5000000
+        },
+        {
+          "dias": 50,
+          "amount": 5000000
+        },
+        {
+          "dias": 60,
+          "amount": 5000000
+        }
+      ]
+    },
+    {
+      "id": "mrxg5jcul48gtzcea7j",
+      "supplier": "SAINT-GOBAIN ARGENTINA SA",
+      "week": "2026-08-17",
+      "amount": 30000000,
+      "plazo": 40,
+      "cheques": [
+        {
+          "dias": 20,
+          "amount": 5000000
+        },
+        {
+          "dias": 30,
+          "amount": 5000000
+        },
+        {
+          "dias": 40,
+          "amount": 5000000
+        },
+        {
+          "dias": 50,
+          "amount": 5000000
+        },
+        {
+          "dias": 55,
+          "amount": 5000000
+        },
+        {
+          "dias": 60,
+          "amount": 5000000
+        }
+      ]
+    },
+    {
+      "id": "mrxg8k4lw9jd2jfmczi",
+      "supplier": "BUILDING TRUST",
+      "week": "2026-08-17",
+      "amount": 10000000,
+      "plazo": 20,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 3000000
+        },
+        {
+          "dias": 50,
+          "amount": 3000000
+        },
+        {
+          "dias": 60,
+          "amount": 4000000
+        }
+      ]
+    },
+    {
+      "id": "mrxhlh8bkao6sq19npj",
+      "supplier": "ISOLANT SA",
+      "week": "2026-08-24",
+      "amount": 8000000,
+      "plazo": 30,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 2000000
+        },
+        {
+          "dias": 40,
+          "amount": 2000000
+        },
+        {
+          "dias": 50,
+          "amount": 2000000
+        },
+        {
+          "dias": 60,
+          "amount": 2000000
+        }
+      ]
+    }
+  ]
+}

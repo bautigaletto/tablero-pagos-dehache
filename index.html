@@ -442,8 +442,20 @@ function boot(){
   document.getElementById('loader').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   loadPlazos();
+  loadPurchases(); // cache local primero
   buildSrcToggle();
   const now=new Date();
+  document.getElementById('footstamp').textContent='Abierto el '+now.toLocaleString('es-AR')+' · importes en pesos argentinos';
+
+  // Intentar cargar compras compartidas de GitHub (fuente de verdad)
+  fetchSharedPurchases().then(shared=>{
+    if(shared!==null){
+      purchases=shared;
+      try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(purchases)); }catch(e){}
+      if(document.getElementById('proj')&&!document.getElementById('proj').classList.contains('hidden'))
+        renderProjection();
+    }
+  });
   document.getElementById('footstamp').textContent='Abierto el '+now.toLocaleString('es-AR')+' · importes en pesos argentinos';
 
   // Mostrar fecha/hora real de última actualización (subida por el script)
@@ -589,7 +601,56 @@ function render(){
 // ============================================================
 let purchases = [];
 let editingId  = null;   // id de la compra que se está editando (null = modo agregar)
-const STORAGE_KEY = 'dehache_proyeccion_v2';
+const STORAGE_KEY  = 'dehache_proyeccion_v2';   // cache local
+const GH_CFG_KEY   = 'dehache_gh_config_v1';
+let saveStatus = {state:'idle',msg:''};
+
+function getGhCfg(){ try{ return JSON.parse(localStorage.getItem(GH_CFG_KEY)||'null'); }catch(e){ return null; } }
+function setGhCfg(cfg){ try{ localStorage.setItem(GH_CFG_KEY,JSON.stringify(cfg)); }catch(e){} }
+
+async function fetchSharedPurchases(){
+  const cfg=getGhCfg();
+  if(!cfg?.usuario||!cfg?.repo) return null;
+  try{
+    const url=`https://raw.githubusercontent.com/${cfg.usuario}/${cfg.repo}/main/compras.json?v=${Date.now()}`;
+    const r=await fetch(url,{cache:'no-store'});
+    if(!r.ok) return null;
+    return (await r.json()).purchases||null;
+  }catch(e){ return null; }
+}
+
+async function pushSharedPurchases(){
+  const cfg=getGhCfg();
+  if(!cfg?.token||!cfg?.usuario||!cfg?.repo){ updateSaveStatus('local','Guardado localmente'); return; }
+  updateSaveStatus('saving','Guardando en GitHub…');
+  try{
+    const content=JSON.stringify({updated:new Date().toISOString(),purchases},null,2);
+    const b64=btoa(unescape(encodeURIComponent(content)));
+    const apiUrl=`https://api.github.com/repos/${cfg.usuario}/${cfg.repo}/contents/compras.json`;
+    const hdrs={'Authorization':`Bearer ${cfg.token}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
+    let sha; try{ const g=await fetch(apiUrl,{headers:hdrs}); if(g.ok) sha=(await g.json()).sha; }catch(e){}
+    const body={message:`compras: ${new Date().toLocaleString('es-AR')}`,content:b64,branch:'main'};
+    if(sha) body.sha=sha;
+    const r=await fetch(apiUrl,{method:'PUT',headers:hdrs,body:JSON.stringify(body)});
+    if(r.status===200||r.status===201) updateSaveStatus('ok',`Guardado ${new Date().toLocaleTimeString('es-AR')}`);
+    else updateSaveStatus('err','Error al guardar en GitHub');
+  }catch(e){ updateSaveStatus('err','Sin conexión a GitHub'); }
+}
+
+function updateSaveStatus(state,msg){
+  saveStatus={state,msg};
+  const el=document.getElementById('save-status');
+  if(!el) return;
+  const ico={ok:'✅ ',err:'⚠️ ',saving:'⏳ ',local:'💾 ',idle:''}[state]||'';
+  el.textContent=ico+msg;
+  el.style.color=state==='err'?'var(--red)':state==='ok'?'#1f9d57':'var(--ink-soft)';
+}
+
+function savePurchases(){
+  try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(purchases)); }catch(e){}
+  pushSharedPurchases();
+}
+function loadPurchases(){ try{ purchases=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ purchases=[]; } }
 
 function getMonday(d){
   const date=new Date(d); const day=date.getDay();
@@ -617,8 +678,6 @@ function paymentMonday(p){
   const plazo = p.plazo ?? termOf(p.supplier);
   return getMonday(addDays(new Date(p.week), plazo));
 }
-function savePurchases(){ try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(purchases)); }catch(e){} }
-function loadPurchases(){ try{ purchases=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ purchases=[]; } }
 
 function getSupplierOptions(){
   // Usa el listado completo de proveedores (incluyendo los sin deuda activa)
@@ -639,7 +698,7 @@ function updateChequeInputs(defaultN){
     wrap.style.cssText='display:flex;align-items:center;gap:6px;margin-top:6px';
     wrap.innerHTML=`<span style="font-size:.82rem;color:var(--ink-soft);white-space:nowrap">Cheque ${i}:</span>
       <input id="pj-ch-${i}-dias" type="number" min="1" max="365" placeholder="días" style="width:90px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
-      <input id="pj-ch-${i}-monto" type="number" min="0" placeholder="monto (vacío=igual)" style="width:160px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">`;
+      <input id="pj-ch-${i}-monto" type="number" min="0" step="any" placeholder="monto (vacío=igual)" style="width:160px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">`;
     cont.appendChild(wrap);
   }
 }
@@ -690,7 +749,7 @@ function renderProjection(){
         value="${editP?editP.supplier.replace(/"/g,'&quot;'):''}">
       <datalist id="pj-prov-list">${datalistOpts}</datalist>
       <select id="pj-week">${weekOpts}</select>
-      <input id="pj-amt" type="number" min="0" step="1" placeholder="Monto total $"
+      <input id="pj-amt" type="number" min="0" step="any" placeholder="Monto total $"
         value="${editP?editP.amount:''}">
       <div style="display:flex;align-items:center;gap:6px">
         <input id="pj-plazo" type="number" min="1" max="365"
@@ -736,12 +795,53 @@ function renderProjection(){
             <button class="del-btn" onclick="deletePurchase('${p.id}')">✕</button>
           </td>
         </tr>`;}).join('');
+  // Plan de compras agrupado por semana de compra
+  const byCompraWeek={};
+  purchases.slice().sort((a,b)=>a.week.localeCompare(b.week)).forEach(p=>{
+    if(!byCompraWeek[p.week]) byCompraWeek[p.week]=[];
+    byCompraWeek[p.week].push(p);
+  });
+  const planCards=Object.entries(byCompraWeek).map(([wk,ps])=>{
+    const weekMon=new Date(wk);
+    const total=ps.reduce((s,p)=>s+p.amount,0);
+    const rows=ps.map(p=>{
+      const payMon=paymentMonday(p);
+      const plazo=p.plazo??termOf(p.supplier);
+      const isBeingEdited=p.id===editingId;
+      const chDesc=(p.cheques||[]).length===0
+        ?`<span style="color:var(--ink-soft);font-size:.8rem">contado</span>`
+        :(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">Ch.${i+1}: ${ch.dias}d · ${fmt2.format(ch.amount)}</span>`).join('');
+      return `<tr style="${isBeingEdited?'background:#fff8e8;':''}">
+        <td><b>${p.supplier}</b><br><span class="tag-plazo">${plazo}d plazo</span></td>
+        <td class="r imp">${fmt2.format(p.amount)}</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--red)">${weekLabel(payMon)}</td>
+        <td>${chDesc}</td>
+        <td style="display:flex;gap:5px">
+          <button class="edit-btn" onclick="startEdit('${p.id}')">✎</button>
+          <button class="del-btn" onclick="deletePurchase('${p.id}')">✕</button>
+        </td>
+      </tr>`;}).join('');
+    return `<div class="tl-card">
+      <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
+        <div class="tl-week-meta"><span class="tl-chev">▶</span>
+          <span class="tl-week-label">${weekLabelLong(weekMon)}</span>
+          <span style="font-size:.78rem;color:var(--ink-soft)">${ps.length} compra${ps.length>1?'s':''}</span>
+        </div>
+        <span class="tl-week-total">${fmt2.format(total)}</span>
+      </div>
+      <div class="tl-body">
+        <table class="proj-table">
+          <thead><tr><th>Proveedor</th><th class="r">Monto</th><th>Sem. pago</th><th>Cheques</th><th></th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
   const comprasSection=`<div class="proj-section">
-    <div class="proj-section-title">📋 Plan de Compras</div>
-    <table class="proj-table">
-      <thead><tr><th>Proveedor</th><th>Sem. compra</th><th class="r">Monto</th><th>Sem. pago</th><th>Cheques</th><th></th></tr></thead>
-      <tbody>${compraRows}</tbody>
-    </table>
+    <div class="proj-section-title">📋 Plan de Compras — por semana</div>
+    <div style="padding:12px 14px 4px">
+      ${planCards||'<div class="tl-empty">No hay compras ingresadas todavía.</div>'}
+    </div>
   </div>`;
 
   // ---- Timeline unificado: pagos + cheques por semana ----
@@ -853,16 +953,52 @@ function renderProjection(){
     </table>
   </div>`;
 
-  // ---- Back button ----
-  const backBtn=`<div style="margin-bottom:14px">
+  // ---- Settings panel ----
+  const cfg=getGhCfg()||{};
+  const settingsSection=`<div class="proj-section" style="margin-bottom:14px">
+    <div class="proj-section-title" style="cursor:pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
+      ⚙️ Configuración de sincronización
+      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">
+        ${cfg.usuario&&cfg.repo?`conectado a ${cfg.usuario}/${cfg.repo}`:'sin configurar — las compras solo se guardan en este navegador'}
+      </span>
+    </div>
+    <div class="hidden" style="padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+      <p style="font-size:.83rem;color:var(--ink-soft)">
+        Configurá tu repositorio de GitHub para que las compras se compartan entre todos los usuarios del tablero.
+        El token se guarda solo en <b>este navegador</b>.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end">
+        <div><label style="font-size:.78rem;color:var(--ink-soft);display:block;margin-bottom:3px">Usuario GitHub</label>
+          <input id="cfg-usuario" value="${cfg.usuario||''}" placeholder="ej: bautigaletto"
+            style="font:inherit;font-size:.88rem;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);width:180px"></div>
+        <div><label style="font-size:.78rem;color:var(--ink-soft);display:block;margin-bottom:3px">Repositorio</label>
+          <input id="cfg-repo" value="${cfg.repo||''}" placeholder="ej: tablero-pagos-dehache"
+            style="font:inherit;font-size:.88rem;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);width:220px"></div>
+        <div><label style="font-size:.78rem;color:var(--ink-soft);display:block;margin-bottom:3px">Token de acceso (para guardar)</label>
+          <input id="cfg-token" type="password" value="${cfg.token||''}" placeholder="ghp_…"
+            style="font:inherit;font-size:.88rem;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);width:240px"></div>
+        <button onclick="saveGhConfig()" class="proj-btn" style="padding:9px 18px">Guardar config</button>
+      </div>
+      <p style="font-size:.76rem;color:var(--ink-soft)">
+        Sin token: podés ver las compras de otros pero no guardar. Con token (permiso <b>repo</b>): podés agregar y editar.
+      </p>
+    </div>
+  </div>`;
+
+  // ---- Back button + estado de guardado ----
+  const backBtn=`<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
     <button onclick="switchToDebt()" style="font:inherit;font-size:.84rem;font-weight:600;
       color:var(--blue);background:var(--blue-bg);border:1px solid rgba(0,34,106,.15);
       border-radius:10px;padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px">
       ← Volver a cuentas a pagar
     </button>
+    <span id="save-status" style="font-size:.8rem;color:var(--ink-soft)">${saveStatus.msg||''}</span>
+    <button onclick="refreshPurchases()" style="font:inherit;font-size:.82rem;font-weight:600;color:var(--ink-soft);background:var(--bg-tint);border:1px solid var(--line);border-radius:9px;padding:7px 13px;cursor:pointer">
+      🔄 Actualizar
+    </button>
   </div>`;
 
-  document.getElementById('proj').innerHTML=backBtn+summary+pendientesSection+addForm+comprasSection+pagosSection+chequesSection;
+  document.getElementById('proj').innerHTML=backBtn+settingsSection+summary+pendientesSection+addForm+comprasSection+pagosSection+chequesSection;
 }
 
 // Auto-rellena el plazo cuando el usuario elige un proveedor conocido
@@ -912,6 +1048,30 @@ function prefillAdd(supplier, amount){
 function switchToDebt(){
   const btn=document.querySelector('#tabs button[data-tab="porvencer"]');
   if(btn) btn.click();
+}
+
+function saveGhConfig(){
+  const u=document.getElementById('cfg-usuario')?.value.trim();
+  const r=document.getElementById('cfg-repo')?.value.trim();
+  const t=document.getElementById('cfg-token')?.value.trim();
+  if(!u||!r){ alert('Completá usuario y repositorio.'); return; }
+  setGhCfg({usuario:u,repo:r,token:t||''});
+  renderProjection();
+  // Cargar compras compartidas con la nueva config
+  fetchSharedPurchases().then(shared=>{ if(shared!==null){ purchases=shared; savePurchases(); renderProjection(); } });
+}
+
+async function refreshPurchases(){
+  updateSaveStatus('saving','Actualizando…');
+  const shared=await fetchSharedPurchases();
+  if(shared!==null){
+    purchases=shared;
+    try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(purchases)); }catch(e){}
+    updateSaveStatus('ok',`Actualizado ${new Date().toLocaleTimeString('es-AR')}`);
+    renderProjection();
+  } else {
+    updateSaveStatus('err','No se pudo conectar a GitHub');
+  }
 }
 
 function handleAddPurchase(){

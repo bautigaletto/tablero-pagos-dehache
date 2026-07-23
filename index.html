@@ -965,13 +965,17 @@ function renderProjection(){
       </tr>`).join('');
 
   const pendientesSection=`<div class="proj-section">
-    <div class="proj-section-title">📥 Facturas por vencer — planificá el pago
-      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">${pendientes.length} comprobantes · ordenados por vencimiento</span>
+    <div class="proj-section-title" style="cursor:pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
+      📥 Facturas por vencer — planificá el pago
+      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">${pendientes.length} comprobantes · hacé click para desplegar</span>
+      <span style="margin-left:auto;font-size:.85rem;color:var(--ink-soft)">▼</span>
     </div>
-    <table class="proj-table">
-      <thead><tr><th>Proveedor · Comprobante</th><th>Vencimiento</th><th>Días</th><th class="r">Importe</th><th></th></tr></thead>
-      <tbody>${pendRows}</tbody>
-    </table>
+    <div class="hidden">
+      <table class="proj-table">
+        <thead><tr><th>Proveedor · Comprobante</th><th>Vencimiento</th><th>Días</th><th class="r">Importe</th><th></th></tr></thead>
+        <tbody>${pendRows}</tbody>
+      </table>
+    </div>
   </div>`;
 
   // ---- Settings panel ----

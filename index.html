@@ -326,8 +326,30 @@ function loadMasterSuppliers(buf){
 }
 /* ==================================================== */
 
-const fmt = new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0});
+const fmt  = new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0});
 const fmt2 = new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtNum = new Intl.NumberFormat('es-AR',{maximumFractionDigits:2,minimumFractionDigits:0});
+
+// Parsea un importe en formato argentino (12.000.000,50) o crudo
+function parseAmtInput(val){
+  if(!val&&val!==0) return NaN;
+  let s=String(val).trim().replace(/\s/g,'');
+  if(!s) return NaN;
+  if(s.includes(',')) return parseFloat(s.replace(/\./g,'').replace(',','.'));
+  const parts=s.split('.');
+  if(parts.length>1&&parts[parts.length-1].length===3) return parseFloat(s.replace(/\./g,''));
+  return parseFloat(s);
+}
+// Formatea al salir del campo (onblur)
+function fmtAmtBlur(el){
+  const v=parseAmtInput(el.value);
+  if(!isNaN(v)&&v>=0) el.value=fmtNum.format(v);
+}
+// Número crudo al entrar para facilitar edición (onfocus)
+function fmtAmtFocus(el){
+  const v=parseAmtInput(el.value);
+  if(!isNaN(v)&&v>=0) el.value=String(v).replace('.',',');
+}
 const credComp = new Set(['NOTA CRED.','PAGO','S. A FAVOR','RECIBO']);
 const TIPOS = {'Proveedor Mercadería':{lbl:'Mercadería',cls:'merc'},'Proveedor Gastos y Servicios':{lbl:'Gastos y Servicios',cls:'gast'}};
 const termOf = p => terms[p] ?? DEFAULT_TERM;
@@ -698,7 +720,9 @@ function updateChequeInputs(defaultN){
     wrap.style.cssText='display:flex;align-items:center;gap:6px;margin-top:6px';
     wrap.innerHTML=`<span style="font-size:.82rem;color:var(--ink-soft);white-space:nowrap">Cheque ${i}:</span>
       <input id="pj-ch-${i}-dias" type="number" min="1" max="365" placeholder="días" style="width:90px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
-      <input id="pj-ch-${i}-monto" type="number" min="0" step="any" placeholder="monto (vacío=igual)" style="width:160px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">`;
+      <input id="pj-ch-${i}-monto" type="text" inputmode="decimal" step="any" placeholder="monto (vacío=igual)"
+        onblur="fmtAmtBlur(this)" onfocus="fmtAmtFocus(this)"
+        style="width:160px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">`;
     cont.appendChild(wrap);
   }
 }
@@ -749,8 +773,9 @@ function renderProjection(){
         value="${editP?editP.supplier.replace(/"/g,'&quot;'):''}">
       <datalist id="pj-prov-list">${datalistOpts}</datalist>
       <select id="pj-week">${weekOpts}</select>
-      <input id="pj-amt" type="number" min="0" step="any" placeholder="Monto total $"
-        value="${editP?editP.amount:''}">
+      <input id="pj-amt" type="text" inputmode="decimal" placeholder="Monto total $"
+        value="${editP ? fmtNum.format(editP.amount) : ''}"
+        onblur="fmtAmtBlur(this)" onfocus="fmtAmtFocus(this)">
       <div style="display:flex;align-items:center;gap:6px">
         <input id="pj-plazo" type="number" min="1" max="365"
           value="${editP?editP.plazo:30}"
@@ -1019,7 +1044,7 @@ function startEdit(id){
       const dEl=document.getElementById(`pj-ch-${i+1}-dias`);
       const mEl=document.getElementById(`pj-ch-${i+1}-monto`);
       if(dEl) dEl.value=ch.dias;
-      if(mEl) mEl.value=ch.amount;
+      if(mEl) mEl.value=fmtNum.format(ch.amount);
     });
   }
   // Scroll al formulario
@@ -1039,7 +1064,7 @@ function prefillAdd(supplier, amount){
     const provEl=document.getElementById('pj-prov');
     const amtEl=document.getElementById('pj-amt');
     if(provEl){ provEl.value=supplier; autoFillPlazo(); }
-    if(amtEl) amtEl.value=amount;
+    if(amtEl) amtEl.value=fmtNum.format(amount);
     document.querySelector('.proj-add')?.scrollIntoView({behavior:'smooth',block:'nearest'});
   },50);
 }
@@ -1077,7 +1102,7 @@ async function refreshPurchases(){
 function handleAddPurchase(){
   const supplier=(document.getElementById('pj-prov').value||'').trim();
   const week=document.getElementById('pj-week').value;
-  const amount=parseFloat(document.getElementById('pj-amt').value);
+  const amount=parseAmtInput(document.getElementById('pj-amt').value);
   const plazo=parseInt(document.getElementById('pj-plazo').value)||DEFAULT_TERM;
   const n=parseInt(document.getElementById('pj-ncheques').value)||0;
   if(!supplier||!week||isNaN(amount)||amount<=0){
@@ -1090,7 +1115,7 @@ function handleAddPurchase(){
     for(let i=1;i<=n;i++){
       const dias=parseInt(document.getElementById(`pj-ch-${i}-dias`)?.value)||0;
       if(dias<=0){ alert(`Ingresá los días del cheque ${i}.`); return; }
-      const montoInput=parseFloat(document.getElementById(`pj-ch-${i}-monto`)?.value);
+      const montoInput=parseAmtInput(document.getElementById(`pj-ch-${i}-monto`)?.value);
       cheques.push({dias, amount:isNaN(montoInput)||montoInput<=0?0:montoInput});
       montoIngresado+=cheques[i-1].amount;
     }

@@ -941,39 +941,35 @@ function renderProjection(){
     </div>
   </div>`;
 
-  // ---- Facturas POR VENCER de F1/F2 (de ahora en adelante) ----
+  // ---- Facturas POR VENCER de F1/F2 — comprobante por comprobante ----
   const allItems=rawItems();
-  const byProv={};
-  allItems.forEach(i=>{
-    if(!i.prov||i.saldo<=0) return;
-    if(isVencido(i)||esCredito(i)) return;   // solo las que NO están vencidas
-    if(!byProv[i.prov]) byProv[i.prov]={prov:i.prov,total:0,minDias:999};
-    byProv[i.prov].total+=i.saldo;
-    byProv[i.prov].minDias=Math.min(byProv[i.prov].minDias,i.dias);
-  });
-  const pendientes=Object.values(byProv)
-    .filter(s=>s.total>0)
-    .sort((a,b)=> b.minDias-a.minDias || b.total-a.total);
+  const pendientes=allItems
+    .filter(i=>i.prov && i.saldo>0 && !isVencido(i) && !esCredito(i))
+    .sort((a,b)=>b.dias-a.dias);   // más próximo a vencer primero
 
   const pendRows=pendientes.length===0
-    ?'<div class="proj-empty">No hay facturas por vencer en F1/F2 sin planificar.</div>'
-    :pendientes.map(s=>`
+    ?'<div class="proj-empty">No hay facturas por vencer en F1/F2.</div>'
+    :pendientes.map(i=>`
       <tr>
-        <td><b>${s.prov}</b></td>
-        <td class="r imp">${fmt.format(s.total)}</td>
-        <td><span class="tag-plazo">${s.minDias}d más próxima</span></td>
+        <td>
+          <div style="font-weight:700;font-size:.88rem">${i.prov}</div>
+          <div style="font-size:.75rem;color:var(--ink-soft)">${i.comp||''} ${i.nro||''}</div>
+        </td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${i.fvto||'—'}</td>
+        <td><span class="tag-plazo">${i.dias}d</span></td>
+        <td class="r imp">${fmt2.format(i.saldo)}</td>
         <td><button class="proj-btn" style="padding:5px 12px;font-size:.8rem"
-          onclick="prefillAdd('${s.prov.replace(/'/g,"\\'")}',${Math.round(s.total)})">
+          onclick="prefillAdd('${(i.prov||'').replace(/'/g,"\\'")}',${i.saldo})">
           ➕ Planificar
         </button></td>
       </tr>`).join('');
 
   const pendientesSection=`<div class="proj-section">
     <div class="proj-section-title">📥 Facturas por vencer — planificá el pago
-      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">solo las que aún no vencieron · click en "Planificar" para pre-cargar el formulario</span>
+      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">${pendientes.length} comprobantes · ordenados por vencimiento</span>
     </div>
     <table class="proj-table">
-      <thead><tr><th>Proveedor</th><th class="r">Monto a pagar</th><th>Próximo vto.</th><th></th></tr></thead>
+      <thead><tr><th>Proveedor · Comprobante</th><th>Vencimiento</th><th>Días</th><th class="r">Importe</th><th></th></tr></thead>
       <tbody>${pendRows}</tbody>
     </table>
   </div>`;

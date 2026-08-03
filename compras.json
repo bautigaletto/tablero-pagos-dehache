@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-03T00:51:00.191Z",
+  "updated": "2026-08-03T18:24:16.538Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -123,27 +123,27 @@
       "plazo": 40,
       "cheques": [
         {
-          "dias": 20,
-          "amount": 4000000
-        },
-        {
-          "dias": 30,
-          "amount": 4000000
-        },
-        {
-          "dias": 45,
-          "amount": 4000000
-        },
-        {
-          "dias": 40,
-          "amount": 4000000
-        },
-        {
-          "dias": 50,
-          "amount": 4000000
-        },
-        {
           "dias": 60,
+          "amount": 4000000
+        },
+        {
+          "dias": 65,
+          "amount": 4000000
+        },
+        {
+          "dias": 70,
+          "amount": 4000000
+        },
+        {
+          "dias": 75,
+          "amount": 4000000
+        },
+        {
+          "dias": 80,
+          "amount": 4000000
+        },
+        {
+          "dias": 90,
           "amount": 5000000
         }
       ]

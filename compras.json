@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-03T18:32:30.797Z",
+  "updated": "2026-08-03T18:32:45.149Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -152,20 +152,7 @@
       "week": "2026-08-17",
       "amount": 10000000,
       "plazo": 20,
-      "cheques": [
-        {
-          "dias": 30,
-          "amount": 3000000
-        },
-        {
-          "dias": 50,
-          "amount": 3000000
-        },
-        {
-          "dias": 60,
-          "amount": 4000000
-        }
-      ]
+      "cheques": []
     },
     {
       "id": "mrxhlh8bkao6sq19npj",

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-03T18:32:45.149Z",
+  "updated": "2026-08-03T18:33:13.405Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -159,25 +159,8 @@
       "supplier": "ISOLANT SA",
       "week": "2026-08-24",
       "amount": 8000000,
-      "plazo": 30,
-      "cheques": [
-        {
-          "dias": 30,
-          "amount": 2000000
-        },
-        {
-          "dias": 40,
-          "amount": 2000000
-        },
-        {
-          "dias": 50,
-          "amount": 2000000
-        },
-        {
-          "dias": 60,
-          "amount": 2000000
-        }
-      ]
+      "plazo": 35,
+      "cheques": []
     },
     {
       "id": "mrxhnorefz7m8y8so38",

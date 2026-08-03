@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-03T18:33:13.405Z",
+  "updated": "2026-08-03T18:33:41.732Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -167,25 +167,8 @@
       "supplier": "EL ALBAÑIL - RAPISEC",
       "week": "2026-08-24",
       "amount": 12000000,
-      "plazo": 30,
-      "cheques": [
-        {
-          "dias": 30,
-          "amount": 3000000
-        },
-        {
-          "dias": 40,
-          "amount": 3000000
-        },
-        {
-          "dias": 50,
-          "amount": 3000000
-        },
-        {
-          "dias": 60,
-          "amount": 3000000
-        }
-      ]
+      "plazo": 35,
+      "cheques": []
     }
   ]
 }

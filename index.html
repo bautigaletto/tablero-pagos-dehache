@@ -289,7 +289,8 @@
 <script>
 /* ====================== CONFIG ====================== */
 const AUTO_FILES = ['F1.xls','F2.xls','proveedores.xls'];   // archivos que el tablero busca en el repo
-const DEFAULT_TERM = 30;                  // plazo por defecto (días) para pasar a vencido
+const DEFAULT_TERM   = 30;
+const CHEQUE_LIMIT   = 45_000_000;   // límite semanal de cheques propios a cubrir
 const terms = { 'ALUMANTA':10, 'BUILDING TRUST':20 };  // plazos especiales por proveedor
 const KEEP_MAX_DIAS = 120;                // se descarta todo lo que supere estos días de antigüedad
 const allSuppliers = {};                  // todos los proveedores de los XLS, sin filtro de días
@@ -747,8 +748,7 @@ function renderProjection(){
 
   // KPIs
   const totalCompras=purchases.reduce((s,p)=>s+p.amount,0);
-  const totalCheques=purchases.reduce((s,p)=>s+(p.cheques||[]).reduce((a,c)=>a+c.amount,0),0);
-  const weeksWithPay=Object.values(payMap).filter(a=>a.length>0);
+  const totalCheques=purchases.reduce((s,p)=>s+(p.cheques||[]).reduce((a,c)=>a+c.amount,0),0);  const weeksWithPay=Object.values(payMap).filter(a=>a.length>0);
   const maxSemana=weeksWithPay.length?Math.max(...weeksWithPay.map(a=>a.reduce((s,p)=>s+p.amount,0))):0;
   const summary=`<div class="proj-summary">
     <div class="proj-kpi blue"><div class="lbl">Compras planificadas</div><div class="val">${fmt.format(totalCompras)}</div></div>
@@ -783,9 +783,22 @@ function renderProjection(){
             font-size:.9rem;padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
         <span style="font-size:.8rem;color:var(--ink-soft);white-space:nowrap">días plazo</span>
       </div>
-      <select id="pj-ncheques" onchange="updateChequeInputs(parseInt(this.value))" style="min-width:150px">
-        ${[0,1,2,3,4,5,6].map(n=>`<option value="${n}"${editP&&editP.cheques.length===n?' selected':''}>${n===0?'Contado (sin cheques)':n+' cheque'+(n>1?'s':'')}</option>`).join('')}
-      </select>
+    </div>
+    <div class="proj-add-row" style="margin-top:8px">
+      <div style="display:flex;align-items:center;gap:6px">
+        <input id="pj-tercero" type="text" inputmode="decimal"
+          placeholder="Cheques de tercero $"
+          value="${editP && editP.chequesTercero ? fmtNum.format(editP.chequesTercero) : ''}"
+          onblur="fmtAmtBlur(this)" onfocus="fmtAmtFocus(this)"
+          style="width:210px;font:inherit;font-size:.88rem;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
+        <span style="font-size:.79rem;color:var(--ink-soft);white-space:nowrap">🤝 no cuenta como cheque a cubrir</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <select id="pj-ncheques" onchange="updateChequeInputs(parseInt(this.value))" style="min-width:180px">
+          ${[0,1,2,3,4,5,6].map(n=>`<option value="${n}"${editP&&editP.cheques.length===n?' selected':''}>${n===0?'Sin cheques propios':n+' cheque'+(n>1?'s':'')+' propio'+(n>1?'s':'')}</option>`).join('')}
+        </select>
+        <span style="font-size:.79rem;color:var(--ink-soft);white-space:nowrap">van a cheques a cubrir</span>
+      </div>
     </div>
     <div id="pj-cheque-inputs" style="margin-top:6px;padding-left:2px">
       <span style="font-size:.8rem;color:var(--ink-soft)">Seleccioná la cantidad de cheques para ingresar los plazos.</span>
@@ -806,13 +819,15 @@ function renderProjection(){
         const payMon=paymentMonday(p);
         const plazo=p.plazo??termOf(p.supplier);
         const isBeingEdited = p.id===editingId;
-        const chDesc=(p.cheques||[]).length===0
+        const tercero=p.chequesTercero||0;
+        const terceroChip=tercero>0?`<span class="cheque-chip" style="background:#e8f5e8;border-color:#b8ddb8;color:#2d6a2d">💵 Tercero: ${fmt2.format(tercero)}</span>`:'';
+        const chDesc=(p.cheques||[]).length===0&&!tercero
           ?`<span style="color:var(--ink-soft);font-size:.8rem">contado</span>`
-          :(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">Ch.${i+1}: ${ch.dias}d · ${fmt.format(ch.amount)}</span>`).join('');
+          :(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">🏦 ${ch.dias}d · ${fmt2.format(ch.amount)}</span>`).join('')+terceroChip;
         return `<tr style="${isBeingEdited?'background:#fff8e8;':''}">
           <td><b>${p.supplier}</b><br><span class="tag-plazo">${plazo}d plazo</span></td>
           <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${weekLabel(new Date(p.week))}</td>
-          <td class="r imp">${fmt.format(p.amount)}</td>
+          <td class="r imp">${fmt2.format(p.amount)}</td>
           <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--red)">${weekLabel(payMon)}</td>
           <td>${chDesc}</td>
           <td style="display:flex;gap:5px">
@@ -833,9 +848,12 @@ function renderProjection(){
       const payMon=paymentMonday(p);
       const plazo=p.plazo??termOf(p.supplier);
       const isBeingEdited=p.id===editingId;
-      const chDesc=(p.cheques||[]).length===0
+      const chDesc=(p.cheques||[]).length===0 && !p.chequesTercero
         ?`<span style="color:var(--ink-soft);font-size:.8rem">contado</span>`
-        :(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">Ch.${i+1}: ${ch.dias}d · ${fmt2.format(ch.amount)}</span>`).join('');
+        :[
+          p.chequesTercero>0?`<span class="cheque-chip" style="background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32">🤝 Tercero: ${fmt2.format(p.chequesTercero)}</span>`:'',
+          ...(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">Ch.${i+1}: ${ch.dias}d · ${fmt2.format(ch.amount)}</span>`)
+        ].filter(Boolean).join('');
       return `<tr style="${isBeingEdited?'background:#fff8e8;':''}">
         <td><b>${p.supplier}</b><br><span class="tag-plazo">${plazo}d plazo</span></td>
         <td class="r imp">${fmt2.format(p.amount)}</td>
@@ -878,20 +896,37 @@ function renderProjection(){
   const today=new Date(); today.setHours(0,0,0,0);
 
   // ---- Helper para generar tarjetas colapsables por semana ----
-  function makeWeekCard(w, items, renderItem, urgencyClass){
+  function makeWeekCard(w, items, renderItem, urgencyClass, limit){
     const daysUntil=Math.round((w-today)/86400000);
     const urgency=urgencyClass||(daysUntil<=7?'urgent':daysUntil<=30?'soon':'');
     const badge=urgency?`<span class="tl-badge ${urgency}">${urgency==='urgent'?'esta semana':'próxima'}</span>`:'';
     const total=items.reduce((s,x)=>s+(x.chequeAmount??x.amount??0),0);
     const body=items.map(renderItem).join('');
-    return `<div class="tl-card ${urgency}">
+    const overLimit = limit && total > limit;
+    const limitBar = limit ? (()=>{
+      const pct=Math.min(Math.round(total/limit*100),100);
+      const color=total>limit?'var(--red)':total>limit*0.8?'#d99a3e':'#1f9d57';
+      return `<div style="padding:8px 16px 10px;border-bottom:1px solid var(--line-soft)">
+        <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:5px">
+          <span style="color:var(--ink-soft)">Límite semanal: ${fmt.format(limit)}</span>
+          <span style="font-weight:700;color:${overLimit?'var(--red)':'var(--ink-soft)'}">
+            ${overLimit?'⚠️ Supera el límite en '+fmt.format(total-limit):'✅ '+fmt.format(limit-total)+' disponible'}
+          </span>
+        </div>
+        <div style="height:7px;background:var(--line-soft);border-radius:4px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:${color};border-radius:4px;transition:width .3s"></div>
+        </div>
+      </div>`;
+    })() : '';
+    return `<div class="tl-card ${urgency}${overLimit?' urgent':''}">
       <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
         <div class="tl-week-meta"><span class="tl-chev">▶</span>
           <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
+          ${overLimit?'<span class="tl-badge urgent">⚠️ sobre el límite</span>':''}
         </div>
         <span class="tl-week-total">${fmt.format(total)}</span>
       </div>
-      <div class="tl-body">${body}</div>
+      <div class="tl-body">${limitBar}${body}</div>
     </div>`;
   }
 
@@ -922,7 +957,21 @@ function renderProjection(){
   const cheqWeeks=weeks.filter(w=>(chequeMap[weekKey(w)]||[]).length>0);
   const cheqCards=cheqWeeks.map(w=>{
     const cheques=chequeMap[weekKey(w)];
-    return makeWeekCard(w, cheques, c=>`
+    const total=cheques.reduce((s,c)=>s+c.chequeAmount,0);
+    const daysUntil=Math.round((w-today)/86400000);
+    const urgency=daysUntil<=7?'urgent':daysUntil<=30?'soon':'';
+    const badge=urgency?`<span class="tl-badge ${urgency}">${urgency==='urgent'?'esta semana':'próxima'}</span>`:'';
+    const overLimit=total>CHEQUE_LIMIT;
+    const pct=Math.min(Math.round(total/CHEQUE_LIMIT*100),100);
+    const limitBar=`<div style="display:flex;align-items:center;gap:10px;padding:9px 16px;border-top:1px solid var(--line-soft);background:${overLimit?'var(--red-bg)':'var(--bg-tint)'}">
+      <div style="flex:1;height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:${overLimit?'var(--red)':'#1f9d57'};border-radius:3px"></div>
+      </div>
+      <span style="font-size:.76rem;font-weight:700;white-space:nowrap;color:${overLimit?'var(--red)':'var(--ink-soft)'}">
+        ${fmt.format(total)} / ${fmt.format(CHEQUE_LIMIT)}${overLimit?' ⚠️':''}
+      </span>
+    </div>`;
+    const cheqItems=cheques.map(c=>`
       <div class="tl-item cheq">
         <div class="tl-icon">🏦</div>
         <div class="tl-info">
@@ -931,11 +980,23 @@ function renderProjection(){
         </div>
         <div class="tl-bar-wrap"><div class="tl-bar cheq" style="width:${Math.round(c.chequeAmount/maxAmt*100)}%"></div></div>
         <div class="tl-amt cheq">${fmt.format(c.chequeAmount)}</div>
-      </div>`);
+      </div>`).join('');
+    return `<div class="tl-card ${urgency}">
+      <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
+        <div class="tl-week-meta"><span class="tl-chev">▶</span>
+          <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
+          ${overLimit?`<span class="tl-badge" style="background:var(--red-bg);color:var(--red)">⚠️ supera ${fmt.format(CHEQUE_LIMIT)}</span>`:''}
+        </div>
+        <span class="tl-week-total" style="color:${overLimit?'var(--red)':'var(--ink)'}">${fmt.format(total)}</span>
+      </div>
+      <div class="tl-body">${cheqItems}${limitBar}</div>
+    </div>`;
   }).join('');
 
   const chequesSection=`<div class="proj-section">
-    <div class="proj-section-title" style="color:#5b3aa0">🏦 Cheques a Cubrir — semana a semana</div>
+    <div class="proj-section-title" style="color:#5b3aa0">🏦 Cheques a Cubrir — semana a semana
+      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">objetivo: no superar ${fmt.format(CHEQUE_LIMIT)}/semana</span>
+    </div>
     <div style="padding:12px 14px 4px">
       ${cheqCards||'<div class="tl-empty">No hay cheques a cubrir todavía.</div>'}
     </div>
@@ -1037,7 +1098,12 @@ function startEdit(id){
   editingId=id;
   const p=purchases.find(x=>x.id===id);
   renderProjection();
-  // Pre-cargar inputs de cheques si los tiene
+  // Pre-cargar cheques de tercero
+  if(p && p.chequesTercero>0){
+    const tEl=document.getElementById('pj-tercero');
+    if(tEl) tEl.value=fmtNum.format(p.chequesTercero);
+  }
+  // Pre-cargar inputs de cheques propios si los tiene
   if(p && (p.cheques||[]).length>0){
     updateChequeInputs(p.cheques.length);
     p.cheques.forEach((ch,i)=>{
@@ -1047,7 +1113,6 @@ function startEdit(id){
       if(mEl) mEl.value=fmtNum.format(ch.amount);
     });
   }
-  // Scroll al formulario
   document.querySelector('.proj-add')?.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
@@ -1109,6 +1174,7 @@ function handleAddPurchase(){
     alert('Completá proveedor, semana y monto antes de agregar.'); return;
   }
   terms[supplier]=plazo; savePlazos();
+  const chequesTercero = parseAmtInput(document.getElementById('pj-tercero')?.value) || 0;
   const cheques=[];
   if(n>0){
     let montoIngresado=0;
@@ -1121,8 +1187,9 @@ function handleAddPurchase(){
     }
     const sinMonto=cheques.every(c=>c.amount===0);
     if(sinMonto){
-      const base=Math.floor(amount/n);
-      cheques.forEach((c,i)=>{ c.amount=i===n-1?amount-base*(n-1):base; });
+      const base_importe = amount - chequesTercero;   // solo el monto propio
+      const base=Math.floor(base_importe/n);
+      cheques.forEach((c,i)=>{ c.amount=i===n-1?base_importe-base*(n-1):base; });
     } else if(Math.abs(montoIngresado-amount)>1){
       if(!confirm(`La suma de los cheques (${fmt.format(montoIngresado)}) difiere del total (${fmt.format(amount)}). ¿Continuás?`)) return;
     }
@@ -1130,10 +1197,10 @@ function handleAddPurchase(){
   if(editingId){
     // Actualizar compra existente
     const idx=purchases.findIndex(p=>p.id===editingId);
-    if(idx>=0) purchases[idx]={...purchases[idx],supplier,week,amount,plazo,cheques};
+    if(idx>=0) purchases[idx]={...purchases[idx],supplier,week,amount,plazo,chequesTercero,cheques};
     editingId=null;
   } else {
-    purchases.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),supplier,week,amount,plazo,cheques});
+    purchases.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),supplier,week,amount,plazo,chequesTercero,cheques});
   }
   savePurchases(); renderProjection();
 }

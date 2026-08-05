@@ -964,13 +964,17 @@ function renderProjection(){
     const badge=urgency?`<span class="tl-badge ${urgency}">${urgency==='urgent'?'esta semana':'próxima'}</span>`:'';
     const overLimit=total>CHEQUE_LIMIT;
     const pct=Math.min(Math.round(total/CHEQUE_LIMIT*100),100);
-    const limitBar=`<div style="display:flex;align-items:center;gap:10px;padding:9px 16px;border-top:1px solid var(--line-soft);background:${overLimit?'var(--red-bg)':'var(--bg-tint)'}">
-      <div style="flex:1;height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden">
-        <div style="width:${pct}%;height:100%;background:${overLimit?'var(--red)':'#1f9d57'};border-radius:3px"></div>
+    const barColor=overLimit?'var(--red)':total>CHEQUE_LIMIT*0.8?'#d99a3e':'#1f9d57';
+    const limitBar=`<div style="padding:7px 16px 9px;background:${overLimit?'var(--red-bg)':'var(--bg-tint)'};border-bottom:1px solid var(--line-soft)">
+      <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:4px">
+        <span style="color:var(--ink-soft)">Límite: ${fmt.format(CHEQUE_LIMIT)}</span>
+        <span style="font-weight:700;color:${overLimit?'var(--red)':'#1f9d57'}">
+          ${overLimit?'⚠️ +'+fmt.format(total-CHEQUE_LIMIT)+' sobre el límite':'✅ '+fmt.format(CHEQUE_LIMIT-total)+' libre'}
+        </span>
       </div>
-      <span style="font-size:.76rem;font-weight:700;white-space:nowrap;color:${overLimit?'var(--red)':'var(--ink-soft)'}">
-        ${fmt.format(total)} / ${fmt.format(CHEQUE_LIMIT)}${overLimit?' ⚠️':''}
-      </span>
+      <div style="height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:${barColor};border-radius:3px"></div>
+      </div>
     </div>`;
     const cheqItems=cheques.map(c=>`
       <div class="tl-item cheq">
@@ -982,15 +986,16 @@ function renderProjection(){
         <div class="tl-bar-wrap"><div class="tl-bar cheq" style="width:${Math.round(c.chequeAmount/maxAmt*100)}%"></div></div>
         <div class="tl-amt cheq">${fmt.format(c.chequeAmount)}</div>
       </div>`).join('');
-    return `<div class="tl-card ${urgency}">
+    return `<div class="tl-card ${urgency}${overLimit?' urgent':''}">
       <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
         <div class="tl-week-meta"><span class="tl-chev">▶</span>
           <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
-          ${overLimit?`<span class="tl-badge" style="background:var(--red-bg);color:var(--red)">⚠️ supera ${fmt.format(CHEQUE_LIMIT)}</span>`:''}
+          ${overLimit?`<span class="tl-badge urgent">⚠️ sobre el límite</span>`:''}
         </div>
         <span class="tl-week-total" style="color:${overLimit?'var(--red)':'var(--ink)'}">${fmt.format(total)}</span>
       </div>
-      <div class="tl-body">${cheqItems}${limitBar}</div>
+      ${limitBar}
+      <div class="tl-body">${cheqItems}</div>
     </div>`;
   }).join('');
 

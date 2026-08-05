@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05T19:29:54.043Z",
+  "updated": "2026-08-05T19:32:23.865Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -205,6 +205,20 @@
         {
           "dias": 55,
           "amount": 2000000
+        }
+      ]
+    },
+    {
+      "id": "msghhho9ga5hek28r6",
+      "supplier": "BUILDING TRUST",
+      "week": "2026-08-03",
+      "amount": 4070524.51,
+      "plazo": 1,
+      "chequesTercero": 2825553,
+      "cheques": [
+        {
+          "dias": 40,
+          "amount": 1244971
         }
       ]
     }

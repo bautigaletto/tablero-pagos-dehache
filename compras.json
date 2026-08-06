@@ -1,14 +1,6 @@
 {
-  "updated": "2026-08-06T19:27:11.219Z",
+  "updated": "2026-08-06T19:27:14.571Z",
   "purchases": [
-    {
-      "id": "mrxfw5funanp5wn6ltp",
-      "supplier": "EL ALBAÑIL - RAPISEC",
-      "week": "2026-08-03",
-      "amount": 10000000,
-      "plazo": 35,
-      "cheques": []
-    },
     {
       "id": "mrxfzghd2smvt4evllv",
       "supplier": "SAINT-GOBAIN ARGENTINA SA",

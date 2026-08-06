@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05T19:32:23.865Z",
+  "updated": "2026-08-06T19:10:36.700Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -8,23 +8,6 @@
       "amount": 25000000,
       "plazo": 45,
       "cheques": []
-    },
-    {
-      "id": "mrwch0pxw42ibdl9r7s",
-      "supplier": "SAINT-GOBAIN ARGENTINA SA",
-      "week": "2026-07-20",
-      "amount": 20000000,
-      "plazo": 30,
-      "cheques": [
-        {
-          "dias": 30,
-          "amount": 10000000
-        },
-        {
-          "dias": 60,
-          "amount": 10000000
-        }
-      ]
     },
     {
       "id": "mrwchrb1ayr1gzxkgdh",

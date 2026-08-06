@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-06T19:12:34.997Z",
+  "updated": "2026-08-06T19:22:06.700Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -10,6 +10,44 @@
       "cheques": []
     },
     {
+      "id": "mrwchrb1ayr1gzxkgdh",
+      "supplier": "FERRUM S.A",
+      "week": "2026-07-20",
+      "amount": 10000000,
+      "plazo": 30,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 5000000
+        },
+        {
+          "dias": 60,
+          "amount": 5000000
+        }
+      ]
+    },
+    {
+      "id": "mrwcjbr8laak1z9iyxg",
+      "supplier": "FERRUM S.A",
+      "week": "2026-07-27",
+      "amount": 12439901.27,
+      "plazo": 2,
+      "cheques": [
+        {
+          "dias": 60,
+          "amount": 4146633.76
+        },
+        {
+          "dias": 75,
+          "amount": 4146633.76
+        },
+        {
+          "dias": 90,
+          "amount": 4146633.76
+        }
+      ]
+    },
+    {
       "id": "mrwcm5x6bmww56vyqm7",
       "supplier": "SAINT-GOBAIN ARGENTINA SA",
       "week": "2026-08-03",
@@ -18,11 +56,53 @@
       "cheques": []
     },
     {
+      "id": "mrwcq4cw5fonbsw9yf3",
+      "supplier": "BUILDING TRUST",
+      "week": "2026-07-27",
+      "amount": 10000000,
+      "plazo": 20,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 5000000
+        },
+        {
+          "dias": 60,
+          "amount": 5000000
+        }
+      ]
+    },
+    {
+      "id": "mrwge0fhjg96sjwyks",
+      "supplier": "ALUMANTA",
+      "week": "2026-07-27",
+      "amount": 15000000,
+      "plazo": 10,
+      "cheques": [
+        {
+          "dias": 30,
+          "amount": 7500000
+        },
+        {
+          "dias": 60,
+          "amount": 7500000
+        }
+      ]
+    },
+    {
       "id": "mrxfr94k1ext3cqashv",
       "supplier": "SAINT-GOBAIN ARGENTINA SA",
       "week": "2026-08-03",
       "amount": 25000000,
       "plazo": 45,
+      "cheques": []
+    },
+    {
+      "id": "mrxfw5funanp5wn6ltp",
+      "supplier": "EL ALBAÑIL - RAPISEC",
+      "week": "2026-08-03",
+      "amount": 10000000,
+      "plazo": 35,
       "cheques": []
     },
     {

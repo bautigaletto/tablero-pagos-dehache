@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-06T19:26:35.404Z",
+  "updated": "2026-08-06T19:26:41.508Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -8,27 +8,6 @@
       "amount": 25000000,
       "plazo": 45,
       "cheques": []
-    },
-    {
-      "id": "mrwcjbr8laak1z9iyxg",
-      "supplier": "FERRUM S.A",
-      "week": "2026-07-27",
-      "amount": 12439901.27,
-      "plazo": 2,
-      "cheques": [
-        {
-          "dias": 60,
-          "amount": 4146633.76
-        },
-        {
-          "dias": 75,
-          "amount": 4146633.76
-        },
-        {
-          "dias": 90,
-          "amount": 4146633.76
-        }
-      ]
     },
     {
       "id": "mrwcm5x6bmww56vyqm7",

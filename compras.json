@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-06T19:10:49.891Z",
+  "updated": "2026-08-06T19:10:53.938Z",
   "purchases": [
     {
       "id": "mrwcg5nicq6fb72x5j8",
@@ -16,23 +16,6 @@
       "amount": 25000000,
       "plazo": 45,
       "cheques": []
-    },
-    {
-      "id": "mrwge0fhjg96sjwyks",
-      "supplier": "ALUMANTA",
-      "week": "2026-07-27",
-      "amount": 15000000,
-      "plazo": 10,
-      "cheques": [
-        {
-          "dias": 30,
-          "amount": 7500000
-        },
-        {
-          "dias": 60,
-          "amount": 7500000
-        }
-      ]
     },
     {
       "id": "mrxfr94k1ext3cqashv",

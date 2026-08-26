@@ -103,7 +103,6 @@
   .type-tag{font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.03em}
   .type-tag.merc{background:var(--blue-bg);color:var(--blue)}
   .type-tag.gast{background:var(--red-bg);color:var(--red)}
-  .term-tag{font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:6px;background:#f0eafb;color:#5b3aa0}
   .sup-tags{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
   .tag{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
   .tag.cnt{background:var(--bg-tint);color:var(--ink-soft)}
@@ -116,10 +115,6 @@
 
   .sup-body{display:none;border-top:1px dashed var(--line);background:var(--bg-tint)}
   .sup.open .sup-body{display:block}
-  .term-edit{display:flex;align-items:center;gap:9px;padding:12px 18px;border-bottom:1px solid var(--line-soft);font-size:.82rem;color:var(--ink-soft);flex-wrap:wrap}
-  .term-edit b{color:var(--ink)}
-  .term-edit input{width:64px;font:inherit;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;text-align:center;padding:5px 6px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
-  .term-edit input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,34,106,.12)}
   table{width:100%;border-collapse:collapse;font-size:.85rem}
   thead th{text-align:left;font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;padding:10px 18px;border-bottom:1px solid var(--line)}
   thead th.r,tbody td.r{text-align:right}
@@ -136,81 +131,32 @@
   .d-ok{background:var(--blue-bg);color:var(--blue)} .d-hi{background:var(--red-bg);color:var(--red)} .d-vhi{background:var(--red-bg2);color:var(--red-deep)}
 
   /* ---- Timeline unificado ---- */
-  .tl-empty{padding:32px 18px;text-align:center;color:var(--ink-soft);font-size:.9rem}
-  .tl-card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow-sm);transition:.15s}
   .tl-card:hover{border-color:#cdd2e0;box-shadow:var(--shadow)}
-  .tl-card.urgent{border-left:4px solid var(--red)}
-  .tl-card.soon{border-left:4px solid #d99a3e}
-  .tl-week-head{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;background:var(--bg-tint);border-bottom:1px solid var(--line-soft);gap:12px;cursor:pointer;user-select:none}
   .tl-week-head:hover{background:#eef0f6}
-  .tl-chev{display:inline-block;font-size:.75rem;margin-right:6px;transition:.2s;color:var(--ink-soft)}
-  .tl-card.open .tl-chev{transform:rotate(90deg)}
-  .tl-body{display:none}
-  .tl-card.open .tl-body{display:block}
-  .tl-week-summary{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  .tl-sum-pay{font-size:.82rem;font-weight:700;color:var(--red)}
-  .tl-sum-cheq{font-size:.82rem;font-weight:700;color:#5b3aa0}
-  .edit-btn{font:inherit;font-size:.73rem;background:var(--blue-bg);color:var(--blue-2);border:1px solid rgba(0,34,106,.15);padding:3px 9px;border-radius:7px;cursor:pointer;font-weight:700}
-  .edit-btn:hover{background:#d4e4f5}
-  .form-editing{background:#fff8e8;border-color:#e6c84a!important}
-  .form-editing .proj-add-title{color:var(--amber,#c8762a)}
-  .tl-week-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .tl-week-label{font-family:'Archivo',sans-serif;font-weight:700;font-size:.95rem;color:var(--ink)}
-  .tl-week-badge{font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.08em}
-  .tl-week-badge.urgent{background:var(--red-bg);color:var(--red)}
-  .tl-week-badge.soon{background:#f6ead7;color:#c8762a}
-  .tl-week-total{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.95rem;color:var(--ink);white-space:nowrap}
-  .tl-item{display:grid;grid-template-columns:28px 1fr auto auto;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid var(--line-soft)}
-  .tl-item:last-child{border-bottom:0}
-  .tl-item.tl-pay{background:rgba(176,21,37,.025)}
-  .tl-item.tl-cheq{background:rgba(91,58,160,.025)}
-  .tl-icon{font-size:1rem;text-align:center}
-  .tl-info{}
-  .tl-supplier{font-weight:700;font-size:.88rem;color:var(--ink)}
-  .tl-sub{font-size:.73rem;color:var(--ink-soft);margin-top:2px}
-  .tl-bar-wrap{width:100px;height:5px;background:var(--line-soft);border-radius:3px;overflow:hidden;flex-shrink:0}
-  .tl-bar{height:100%;border-radius:3px}
-  .tl-bar.pay{background:var(--red)}
-  .tl-bar.cheq{background:#5b3aa0}
-  .tl-amt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.88rem;white-space:nowrap;text-align:right}
-  .tl-amt.pay{color:var(--red)} .tl-amt.cheq{color:#5b3aa0}
+  .tl-card.open
+  .tl-card.open
 
   .empty{text-align:center;padding:50px 20px;color:var(--ink-soft)}
   .empty strong{display:block;font-family:'Archivo',sans-serif;font-size:1.2rem;color:var(--ink);margin-bottom:6px}
 
   /* ---- Proyección ---- */
   #proj{margin-top:0}
-  .proj-add{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
-  .proj-add-title{font-family:'Archivo',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:12px;color:var(--ink);display:flex;align-items:center;gap:10px}
-  .proj-add-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   .proj-add-row select,.proj-add-row input[type="number"]{font:inherit;font-size:.88rem;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
   .proj-add-row select{min-width:220px} .proj-add-row input[type="number"]{width:170px}
   .proj-add-row select:focus,.proj-add-row input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,34,106,.12)}
-  .proj-btn{font:inherit;font-weight:700;font-size:.88rem;padding:10px 20px;border-radius:10px;border:0;background:var(--blue);color:#fff;cursor:pointer}
   .proj-btn:hover{background:var(--blue-2)}
-  .proj-section{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow-sm)}
-  .proj-section-title{font-family:'Archivo',sans-serif;font-weight:700;font-size:.93rem;padding:13px 18px;border-bottom:1px solid var(--line-soft);color:var(--ink);background:var(--bg-tint);display:flex;align-items:center;gap:8px}
-  .proj-table{width:100%;border-collapse:collapse;font-size:.85rem}
   .proj-table thead th{text-align:left;font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;padding:9px 16px;border-bottom:1px solid var(--line)}
   .proj-table thead th.r,.proj-table tbody td.r{text-align:right}
   .proj-table tbody td{padding:9px 16px;border-bottom:1px solid var(--line-soft);vertical-align:top}
   .proj-table tbody tr:last-child td{border-bottom:0}
   .proj-table tbody tr:hover{background:rgba(0,34,106,.025)}
-  .del-btn{font:inherit;font-size:.73rem;background:var(--red-bg);color:var(--red);border:0;padding:3px 9px;border-radius:7px;cursor:pointer;font-weight:700}
-  .del-btn:hover{background:var(--red-bg2)}
   .pay-chip{display:inline-flex;align-items:center;gap:5px;background:var(--bg-tint);border:1px solid var(--line-soft);border-radius:8px;padding:3px 9px;margin:2px 3px 2px 0;font-size:.81rem}
   .pay-chip b{color:var(--blue);font-weight:700}
-  .cheque-chip{display:inline-flex;align-items:center;gap:5px;background:#f5f0fb;border:1px solid #d9c8f0;border-radius:8px;padding:3px 9px;margin:2px 3px 2px 0;font-size:.81rem}
   .cheque-chip b{color:#5b3aa0;font-weight:700}
-  .tag-plazo{display:inline-block;font-size:.67rem;font-weight:700;padding:1px 7px;border-radius:5px;background:var(--blue-bg);color:var(--blue-2);margin-top:2px}
-  .tag-plazo-red{background:var(--red-bg)!important;color:var(--red)!important}
   .proj-kpi.purple::before{background:#5b3aa0}
-  .proj-empty{padding:28px 18px;color:var(--ink-soft);text-align:center;font-size:.88rem}
   .wcell{white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;color:var(--ink-soft);min-width:130px}
   .wcell.has-pay{color:var(--ink)}
   .week-total{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.92rem;white-space:nowrap}
-  .proj-summary{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px}
-  .proj-kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;flex:1;min-width:160px;box-shadow:var(--shadow-sm)}
   .proj-kpi::before{content:"";display:block;width:32px;height:3px;border-radius:3px;margin-bottom:8px}
   .proj-kpi.blue::before{background:var(--blue)} .proj-kpi.red::before{background:var(--red)} .proj-kpi.ink::before{background:var(--ink)}
   .proj-kpi .lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);font-weight:700}
@@ -271,14 +217,11 @@
       <div class="tabs" id="tabs">
         <button data-tab="porvencer" class="on">Por vencer <span class="badge" id="b-pv">0</span></button>
         <button data-tab="vencido">Vencido <span class="badge" id="b-v">0</span></button>
-        <button data-tab="proyeccion">Proyección</button>
       </div>
     </div>
     <div class="barwrap" id="barwrap"></div>
     <div class="list" id="list"></div>
   </div>
-
-  <div id="proj" class="hidden"></div>
 
   <footer>
     <div>Importe por comprobante: <b>Saldo del comprobante</b>. Importes en <span style="color:var(--blue-2);font-weight:700">azul</span> = notas de crédito, pagos o saldos a favor (restan deuda). El plazo de cada proveedor se ajusta dentro de su panel.</div>
@@ -288,69 +231,15 @@
 
 <script>
 /* ====================== CONFIG ====================== */
-const AUTO_FILES = ['F1.xls','F2.xls','proveedores.xls'];   // archivos que el tablero busca en el repo
+const AUTO_FILES = ['F1.xls','F2.xls'];   // archivos que el tablero busca en el repo
 const DEFAULT_TERM   = 30;
-const CHEQUE_LIMIT   = 45_000_000;   // límite semanal de cheques propios a cubrir
 const terms = { 'ALUMANTA':10, 'BUILDING TRUST':20 };  // plazos especiales por proveedor
 const KEEP_MAX_DIAS = 120;                // se descarta todo lo que supere estos días de antigüedad
-const allSuppliers = {};                  // todos los proveedores de los XLS, sin filtro de días
-const PLAZOS_KEY  = 'dehache_plazos_v1'; // plazos personalizados guardados en el navegador
 
-// Carga los plazos guardados en el navegador
-function loadPlazos(){
-  try{ const p=JSON.parse(localStorage.getItem(PLAZOS_KEY)||'{}');
-    Object.assign(terms, p); }catch(e){}
-}
-function savePlazos(){
-  try{ localStorage.setItem(PLAZOS_KEY, JSON.stringify(terms)); }catch(e){}
-}
-
-// Lee proveedores.xls: busca la fila de encabezados y extrae Razón Social
-function loadMasterSuppliers(buf){
-  try{
-    const wb=XLSX.read(buf,{type:'array'});
-    const ws=wb.Sheets[wb.SheetNames[0]];
-    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:null});
-    // Buscar fila de encabezados (contiene "Razón Social")
-    let hr=rows.findIndex(r=>r.some(c=>String(c||'').trim()==='Razón Social'));
-    if(hr<0) hr=2;
-    const H=rows[hr];
-    const colNombre=H.findIndex(c=>String(c||'').trim()==='Razón Social');
-    if(colNombre<0) return;
-    rows.slice(hr+1).forEach(r=>{
-      if(!r) return;
-      const nombre=String(r[colNombre]||'').replace(/\u00a5|¥/g,'Ñ').trim();
-      if(nombre) allSuppliers[nombre]=termOf(nombre);
-    });
-    console.log('Proveedores maestro cargados:', Object.keys(allSuppliers).length);
-  }catch(e){ console.warn('Error leyendo proveedores.xls',e); }
-}
 /* ==================================================== */
 
 const fmt  = new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0});
 const fmt2 = new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtNum = new Intl.NumberFormat('es-AR',{maximumFractionDigits:2,minimumFractionDigits:0});
-
-// Parsea un importe en formato argentino (12.000.000,50) o crudo
-function parseAmtInput(val){
-  if(!val&&val!==0) return NaN;
-  let s=String(val).trim().replace(/\s/g,'');
-  if(!s) return NaN;
-  if(s.includes(',')) return parseFloat(s.replace(/\./g,'').replace(',','.'));
-  const parts=s.split('.');
-  if(parts.length>1&&parts[parts.length-1].length===3) return parseFloat(s.replace(/\./g,''));
-  return parseFloat(s);
-}
-// Formatea al salir del campo (onblur)
-function fmtAmtBlur(el){
-  const v=parseAmtInput(el.value);
-  if(!isNaN(v)&&v>=0) el.value=fmtNum.format(v);
-}
-// Número crudo al entrar para facilitar edición (onfocus)
-function fmtAmtFocus(el){
-  const v=parseAmtInput(el.value);
-  if(!isNaN(v)&&v>=0) el.value=String(v).replace('.',',');
-}
 const credComp = new Set(['NOTA CRED.','PAGO','S. A FAVOR','RECIBO']);
 const TIPOS = {'Proveedor Mercadería':{lbl:'Mercadería',cls:'merc'},'Proveedor Gastos y Servicios':{lbl:'Gastos y Servicios',cls:'gast'}};
 const termOf = p => terms[p] ?? DEFAULT_TERM;
@@ -361,7 +250,7 @@ const isVencido  = i => !sinVenc(i) && venceDias(i) > 0;
 const isVencidoFactura = i => !esCredito(i) && !sinVenc(i) && venceDias(i) > 0;
 
 let DATA = {};
-let state = {src:null, tab:'porvencer', q:'', sort:'monto', type:'all'};
+let state = {src:'ALL', tab:'porvencer', q:'', sort:'monto', type:'all'};
 
 /* ---------- parsing de los .xls ---------- */
 function clean(v){ return typeof v==='string' ? v.replace(/\u00a5|¥/g,'Ñ').replace(/§/g,'º').trim() : v; }
@@ -404,8 +293,6 @@ function processWorkbook(buf, key){
     const r=rows[i]; if(!r) continue;
     const prov=clean(r[col.prov]); if(!prov) continue;
     const dias=Number(r[col.dias]); if(!isFinite(dias)) continue;
-    // Registrar en el listado completo ANTES del filtro de días
-    if(!allSuppliers[prov]) allSuppliers[prov] = termOf(prov);
     if(dias>KEEP_MAX_DIAS) continue;
     const saldo=Number(r[col.saldo])||0;
     items.push({prov, loc:clean(r[col.loc]), tipoProv:clean(r[col.tipo]),
@@ -423,9 +310,7 @@ async function loadFromRepo(){
       const res=await fetch(f,{cache:'no-store'});
       if(!res.ok) continue;
       const buf=await res.arrayBuffer();
-      if(f==='proveedores.xls'||f==='proveedores.xlsx'){
-        loadMasterSuppliers(buf);
-      } else {
+      {
         const key=f.replace(/\.xlsx?$/i,'');
         found[key]=processWorkbook(buf, key);
       }
@@ -464,21 +349,8 @@ async function init(){
 function boot(){
   document.getElementById('loader').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
-  loadPlazos();
-  loadPurchases(); // cache local primero
   buildSrcToggle();
   const now=new Date();
-  document.getElementById('footstamp').textContent='Abierto el '+now.toLocaleString('es-AR')+' · importes en pesos argentinos';
-
-  // Intentar cargar compras compartidas de GitHub (fuente de verdad)
-  fetchSharedPurchases().then(shared=>{
-    if(shared!==null){
-      purchases=shared;
-      try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(purchases)); }catch(e){}
-      if(document.getElementById('proj')&&!document.getElementById('proj').classList.contains('hidden'))
-        renderProjection();
-    }
-  });
   document.getElementById('footstamp').textContent='Abierto el '+now.toLocaleString('es-AR')+' · importes en pesos argentinos';
 
   // Mostrar fecha/hora real de última actualización (subida por el script)
@@ -502,7 +374,7 @@ function boot(){
 /* ---------- UI ---------- */
 function buildSrcToggle(){
   const keys=Object.keys(DATA);
-  state.src=keys[0];
+  state.src='ALL';
   const el=document.getElementById('srcToggle'); el.innerHTML='';
   const mk=(s,label)=>{ const b=document.createElement('button'); b.textContent=label; b.dataset.src=s;
     if(s===state.src)b.classList.add('on');
@@ -604,617 +476,14 @@ function render(){
         <td class="r imp ${i.saldo<0?'neg':''}">${fmt2.format(i.saldo)}</td></tr>`;}).join('');
     return `<div class="sup"><div class="sup-head" onclick="this.parentNode.classList.toggle('open')">
       <div><div class="sup-name"><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m9 6 6 6-6 6"/></svg>${s.prov}</div>
-        <div class="sub-row"><span class="type-tag ${tipo.cls}">${tipo.lbl}</span>${s.loc?`<span class="sup-loc">${s.loc}</span>`:''}${custom?`<span class="term-tag">vence a +${t} días</span>`:''}</div></div>
+        <div class="sub-row"><span class="type-tag ${tipo.cls}">${tipo.lbl}</span>${s.loc?`<span class="sup-loc">${s.loc}</span>`:''}</div></div>
       <div class="sup-tags"><span class="tag cnt">${s.items.length} compr.</span>${statTag}</div>
       <div class="sup-total ${fav?'fav':''}">${fmt.format(s.total)}</div></div>
       <div class="sup-body">
-        <div class="term-edit"><span>Plazo de pago de <b>${s.prov}</b>:</span>
-          <input type="number" min="0" max="120" value="${t}" data-prov="${(s.prov||'').replace(/"/g,'&quot;')}">
-          <span>días — supera ese plazo y la factura figura como vencida.</span></div>
         <table><thead><tr><th>Comprobante</th><th>Vencimiento</th><th class="r">Estado</th><th class="r">Plazo</th><th class="r">Importe</th></tr></thead><tbody>${rows}</tbody></table>
       </div></div>`;}).join('');
-  cont.querySelectorAll('.term-edit input').forEach(inp=>{
-    inp.addEventListener('click',e=>e.stopPropagation());
-    inp.addEventListener('change',e=>{ let v=parseInt(e.target.value,10); if(isNaN(v)||v<0)v=0; if(v>120)v=120; terms[e.target.dataset.prov]=v; render(); });
-  });
 }
 
-// ============================================================
-// PROYECCIÓN DE COMPRAS Y PAGOS
-// ============================================================
-let purchases = [];
-let editingId  = null;   // id de la compra que se está editando (null = modo agregar)
-const STORAGE_KEY  = 'dehache_proyeccion_v2';   // cache local
-const GH_CFG_KEY   = 'dehache_gh_config_v1';
-let saveStatus = {state:'idle',msg:''};
-
-function getGhCfg(){ try{ return JSON.parse(localStorage.getItem(GH_CFG_KEY)||'null'); }catch(e){ return null; } }
-function setGhCfg(cfg){ try{ localStorage.setItem(GH_CFG_KEY,JSON.stringify(cfg)); }catch(e){} }
-
-async function fetchSharedPurchases(){
-  const cfg=getGhCfg();
-  if(!cfg?.usuario||!cfg?.repo) return null;
-  try{
-    const url=`https://raw.githubusercontent.com/${cfg.usuario}/${cfg.repo}/main/compras.json?v=${Date.now()}`;
-    const r=await fetch(url,{cache:'no-store'});
-    if(!r.ok) return null;
-    return (await r.json()).purchases||null;
-  }catch(e){ return null; }
-}
-
-async function pushSharedPurchases(){
-  const cfg=getGhCfg();
-  if(!cfg?.token||!cfg?.usuario||!cfg?.repo){ updateSaveStatus('local','Guardado localmente'); return; }
-  updateSaveStatus('saving','Guardando en GitHub…');
-  try{
-    const content=JSON.stringify({updated:new Date().toISOString(),purchases},null,2);
-    const b64=btoa(unescape(encodeURIComponent(content)));
-    const apiUrl=`https://api.github.com/repos/${cfg.usuario}/${cfg.repo}/contents/compras.json`;
-    const hdrs={'Authorization':`Bearer ${cfg.token}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
-    let sha; try{ const g=await fetch(apiUrl,{headers:hdrs}); if(g.ok) sha=(await g.json()).sha; }catch(e){}
-    const body={message:`compras: ${new Date().toLocaleString('es-AR')}`,content:b64,branch:'main'};
-    if(sha) body.sha=sha;
-    const r=await fetch(apiUrl,{method:'PUT',headers:hdrs,body:JSON.stringify(body)});
-    if(r.status===200||r.status===201) updateSaveStatus('ok',`Guardado ${new Date().toLocaleTimeString('es-AR')}`);
-    else updateSaveStatus('err','Error al guardar en GitHub');
-  }catch(e){ updateSaveStatus('err','Sin conexión a GitHub'); }
-}
-
-function updateSaveStatus(state,msg){
-  saveStatus={state,msg};
-  const el=document.getElementById('save-status');
-  if(!el) return;
-  const ico={ok:'✅ ',err:'⚠️ ',saving:'⏳ ',local:'💾 ',idle:''}[state]||'';
-  el.textContent=ico+msg;
-  el.style.color=state==='err'?'var(--red)':state==='ok'?'#1f9d57':'var(--ink-soft)';
-}
-
-function savePurchases(){
-  try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(purchases)); }catch(e){}
-  pushSharedPurchases();
-}
-function loadPurchases(){ try{ purchases=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ purchases=[]; } }
-
-function getMonday(d){
-  const date=new Date(d); const day=date.getDay();
-  date.setDate(date.getDate()-(day===0?6:day-1)); date.setHours(0,0,0,0); return date;
-}
-function addDays(d,n){ const r=new Date(d); r.setDate(r.getDate()+n); return r; }
-function weekKey(d){ return getMonday(d).toISOString().slice(0,10); }
-function weekLabel(monday){
-  const m=new Date(monday), s=addDays(m,6);
-  return `${pad(m.getDate())}/${pad(m.getMonth()+1)} – ${pad(s.getDate())}/${pad(s.getMonth()+1)}`;
-}
-function weekLabelLong(monday){
-  const m=new Date(monday), s=addDays(m,6);
-  const mes=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  return `${pad(m.getDate())} ${mes[m.getMonth()]} – ${pad(s.getDate())} ${mes[s.getMonth()]}`;
-}
-function getWeeks(){
-  const weeks=[]; let cur=getMonday(new Date());
-  const end=new Date(2026,11,28);
-  while(cur<=end){ weeks.push(new Date(cur)); cur=addDays(cur,7); }
-  return weeks;
-}
-// Lunes de la semana de pago = lunes de semana de compra + plazo guardado en la compra
-function paymentMonday(p){
-  const plazo = p.plazo ?? termOf(p.supplier);
-  return getMonday(addDays(new Date(p.week), plazo));
-}
-
-function getSupplierOptions(){
-  // Usa el listado completo de proveedores (incluyendo los sin deuda activa)
-  const base = Object.keys(allSuppliers).length > 0 ? allSuppliers : (() => {
-    const map={}; rawItems().forEach(i=>{ if(i.prov) map[i.prov]=termOf(i.prov); }); return map;
-  })();
-  return Object.entries(base).sort((a,b)=>a[0].localeCompare(b[0]));
-}
-
-// Actualiza los inputs de días de cheques al cambiar la cantidad
-function updateChequeInputs(defaultN){
-  const n=defaultN!==undefined ? defaultN : (parseInt(document.getElementById('pj-ncheques')?.value)||0);
-  const cont=document.getElementById('pj-cheque-inputs');
-  if(!cont) return;
-  cont.innerHTML='';
-  for(let i=1;i<=n;i++){
-    const wrap=document.createElement('div');
-    wrap.style.cssText='display:flex;align-items:center;gap:6px;margin-top:6px';
-    wrap.innerHTML=`<span style="font-size:.82rem;color:var(--ink-soft);white-space:nowrap">Cheque ${i}:</span>
-      <input id="pj-ch-${i}-dias" type="number" min="1" max="365" placeholder="días" style="width:90px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
-      <input id="pj-ch-${i}-monto" type="text" inputmode="decimal" step="any" placeholder="monto (vacío=igual)"
-        onblur="fmtAmtBlur(this)" onfocus="fmtAmtFocus(this)"
-        style="width:160px;font:inherit;font-size:.88rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card)">`;
-    cont.appendChild(wrap);
-  }
-}
-
-function renderProjection(){
-  const weeks=getWeeks();
-
-  // Mapas de pagos y cheques — usa p.plazo guardado en cada compra
-  const payMap={}; const chequeMap={};
-  weeks.forEach(w=>{ payMap[weekKey(w)]=[]; chequeMap[weekKey(w)]=[]; });
-  purchases.forEach(p=>{
-    const payMon=paymentMonday(p);
-    const pk=weekKey(payMon);
-    if(!payMap[pk]) payMap[pk]=[];
-    payMap[pk].push(p);
-    (p.cheques||[]).forEach(ch=>{
-      const ck=weekKey(addDays(payMon, ch.dias));
-      if(!chequeMap[ck]) chequeMap[ck]=[];
-      chequeMap[ck].push({...p, chequeAmount:ch.amount, chequeDias:ch.dias, payWeekLabel:weekLabel(payMon)});
-    });
-  });
-
-  // KPIs
-  const totalCompras=purchases.reduce((s,p)=>s+p.amount,0);
-  const totalCheques=purchases.reduce((s,p)=>s+(p.cheques||[]).reduce((a,c)=>a+c.amount,0),0);  const weeksWithPay=Object.values(payMap).filter(a=>a.length>0);
-  const maxSemana=weeksWithPay.length?Math.max(...weeksWithPay.map(a=>a.reduce((s,p)=>s+p.amount,0))):0;
-  const summary=`<div class="proj-summary">
-    <div class="proj-kpi blue"><div class="lbl">Compras planificadas</div><div class="val">${fmt.format(totalCompras)}</div></div>
-    <div class="proj-kpi red"><div class="lbl">Pagos a proveedores</div><div class="val">${fmt.format(totalCompras)}</div></div>
-    <div class="proj-kpi purple"><div class="lbl">Cheques a cubrir</div><div class="val">${fmt.format(totalCheques)}</div></div>
-    <div class="proj-kpi ink"><div class="lbl">Mayor pago semanal</div><div class="val">${fmt.format(maxSemana)}</div></div>
-  </div>`;
-
-  // Formulario — proveedor: texto libre con sugerencias; plazo: campo propio
-  const allProvNames=Object.keys(allSuppliers).sort((a,b)=>a.localeCompare(b));
-  const datalistOpts=allProvNames.map(p=>`<option value="${p.replace(/"/g,'&quot;')}">`).join('');
-  const isEditing = editingId !== null;
-  const editP = isEditing ? purchases.find(p=>p.id===editingId) : null;
-  const weekOpts=weeks.map(w=>`<option value="${weekKey(w)}"${editP&&weekKey(w)===editP.week?' selected':''}>` +
-    `${weekLabel(w)}</option>`).join('');
-  const addForm=`<div class="proj-add${isEditing?' form-editing':''}">
-    <div class="proj-add-title">${isEditing?'✏️ Editando compra':'➕ Agregar compra'}</div>
-    <div class="proj-add-row">
-      <input id="pj-prov" type="text" list="pj-prov-list"
-        placeholder="Proveedor (escribí o elegí)" autocomplete="off"
-        style="min-width:260px" oninput="autoFillPlazo()"
-        value="${editP?editP.supplier.replace(/"/g,'&quot;'):''}">
-      <datalist id="pj-prov-list">${datalistOpts}</datalist>
-      <select id="pj-week">${weekOpts}</select>
-      <input id="pj-amt" type="text" inputmode="decimal" placeholder="Monto total $"
-        value="${editP ? fmtNum.format(editP.amount) : ''}"
-        onblur="fmtAmtBlur(this)" onfocus="fmtAmtFocus(this)">
-      <div style="display:flex;align-items:center;gap:6px">
-        <input id="pj-plazo" type="number" min="1" max="365"
-          value="${editP?editP.plazo:30}"
-          style="width:70px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;
-            font-size:.9rem;padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
-        <span style="font-size:.8rem;color:var(--ink-soft);white-space:nowrap">días plazo</span>
-      </div>
-    </div>
-    <div class="proj-add-row" style="margin-top:8px">
-      <div style="display:flex;align-items:center;gap:6px">
-        <input id="pj-tercero" type="text" inputmode="decimal"
-          placeholder="Cheques de tercero $"
-          value="${editP && editP.chequesTercero ? fmtNum.format(editP.chequesTercero) : ''}"
-          onblur="fmtAmtBlur(this)" onfocus="fmtAmtFocus(this)"
-          style="width:210px;font:inherit;font-size:.88rem;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
-        <span style="font-size:.79rem;color:var(--ink-soft);white-space:nowrap">🤝 no cuenta como cheque a cubrir</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px">
-        <input id="pj-ncheques" type="number" min="0" max="99" value="${editP?editP.cheques.length:0}"
-          onchange="updateChequeInputs(parseInt(this.value)||0)"
-          style="width:70px;font:inherit;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;text-align:center;padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card)">
-        <span style="font-size:.79rem;color:var(--ink-soft);white-space:nowrap">cheques propios → van a cubrir</span>
-      </div>
-    </div>
-    <div id="pj-cheque-inputs" style="margin-top:6px;padding-left:2px">
-      <span style="font-size:.8rem;color:var(--ink-soft)">Seleccioná la cantidad de cheques para ingresar los plazos.</span>
-    </div>
-    <div style="margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <button class="proj-btn" onclick="handleAddPurchase()">
-        ${isEditing?'💾 Guardar cambios':'+ Agregar compra'}
-      </button>
-      ${isEditing?`<button onclick="cancelEdit()" style="font:inherit;font-size:.88rem;font-weight:600;padding:10px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer;color:var(--ink-soft)">✕ Cancelar</button>`:''}
-      <span style="font-size:.77rem;color:var(--ink-soft)">${isEditing?'Modificá los campos y guardá.':'El plazo ingresado se recuerda para el proveedor la próxima vez.'}</span>
-    </div>
-  </div>`;
-
-  // Tabla de compras
-  const compraRows=purchases.length===0
-    ?`<tr><td colspan="6" class="proj-empty">No hay compras ingresadas todavía.</td></tr>`
-    :purchases.slice().sort((a,b)=>a.week.localeCompare(b.week)).map(p=>{
-        const payMon=paymentMonday(p);
-        const plazo=p.plazo??termOf(p.supplier);
-        const isBeingEdited = p.id===editingId;
-        const tercero=p.chequesTercero||0;
-        const terceroChip=tercero>0?`<span class="cheque-chip" style="background:#e8f5e8;border-color:#b8ddb8;color:#2d6a2d">💵 Tercero: ${fmt2.format(tercero)}</span>`:'';
-        const chDesc=(p.cheques||[]).length===0&&!tercero
-          ?`<span style="color:var(--ink-soft);font-size:.8rem">contado</span>`
-          :(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">🏦 ${ch.dias}d · ${fmt2.format(ch.amount)}</span>`).join('')+terceroChip;
-        return `<tr style="${isBeingEdited?'background:#fff8e8;':''}">
-          <td><b>${p.supplier}</b><br><span class="tag-plazo">${plazo}d plazo</span></td>
-          <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${weekLabel(new Date(p.week))}</td>
-          <td class="r imp">${fmt2.format(p.amount)}</td>
-          <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--red)">${weekLabel(payMon)}</td>
-          <td>${chDesc}</td>
-          <td style="display:flex;gap:5px">
-            <button class="edit-btn" onclick="startEdit('${p.id}')">✎</button>
-            <button class="del-btn" onclick="deletePurchase('${p.id}')">✕</button>
-          </td>
-        </tr>`;}).join('');
-  // Plan de compras agrupado por semana de compra
-  const byCompraWeek={};
-  purchases.slice().sort((a,b)=>a.week.localeCompare(b.week)).forEach(p=>{
-    if(!byCompraWeek[p.week]) byCompraWeek[p.week]=[];
-    byCompraWeek[p.week].push(p);
-  });
-  const planCards=Object.entries(byCompraWeek).map(([wk,ps])=>{
-    const weekMon=new Date(wk);
-    const total=ps.reduce((s,p)=>s+p.amount,0);
-    const rows=ps.map(p=>{
-      const payMon=paymentMonday(p);
-      const plazo=p.plazo??termOf(p.supplier);
-      const isBeingEdited=p.id===editingId;
-      const chDesc=(p.cheques||[]).length===0 && !p.chequesTercero
-        ?`<span style="color:var(--ink-soft);font-size:.8rem">contado</span>`
-        :[
-          p.chequesTercero>0?`<span class="cheque-chip" style="background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32">🤝 Tercero: ${fmt2.format(p.chequesTercero)}</span>`:'',
-          ...(p.cheques||[]).map((ch,i)=>`<span class="cheque-chip">Ch.${i+1}: ${ch.dias}d · ${fmt2.format(ch.amount)}</span>`)
-        ].filter(Boolean).join('');
-      return `<tr style="${isBeingEdited?'background:#fff8e8;':''}">
-        <td><b>${p.supplier}</b><br><span class="tag-plazo">${plazo}d plazo</span></td>
-        <td class="r imp">${fmt2.format(p.amount)}</td>
-        <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--red)">${weekLabel(payMon)}</td>
-        <td>${chDesc}</td>
-        <td style="display:flex;gap:5px">
-          <button class="edit-btn" onclick="startEdit('${p.id}')">✎</button>
-          <button class="del-btn" onclick="deletePurchase('${p.id}')">✕</button>
-        </td>
-      </tr>`;}).join('');
-    return `<div class="tl-card">
-      <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
-        <div class="tl-week-meta"><span class="tl-chev">▶</span>
-          <span class="tl-week-label">${weekLabelLong(weekMon)}</span>
-          <span style="font-size:.78rem;color:var(--ink-soft)">${ps.length} compra${ps.length>1?'s':''}</span>
-        </div>
-        <span class="tl-week-total">${fmt2.format(total)}</span>
-      </div>
-      <div class="tl-body">
-        <table class="proj-table">
-          <thead><tr><th>Proveedor</th><th class="r">Monto</th><th>Sem. pago</th><th>Cheques</th><th></th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </div>`;
-  }).join('');
-  const comprasSection=`<div class="proj-section">
-    <div class="proj-section-title">📋 Plan de Compras — por semana</div>
-    <div style="padding:12px 14px 4px">
-      ${planCards||'<div class="tl-empty">No hay compras ingresadas todavía.</div>'}
-    </div>
-  </div>`;
-
-  // ---- Timeline unificado: pagos + cheques por semana ----
-  const allAmts=[
-    ...Object.values(payMap).flatMap(a=>a.map(p=>p.amount)),
-    ...Object.values(chequeMap).flatMap(a=>a.map(c=>c.chequeAmount))
-  ];
-  const maxAmt=Math.max(...allAmts,1);
-  const today=new Date(); today.setHours(0,0,0,0);
-
-  // ---- Helper para generar tarjetas colapsables por semana ----
-  function makeWeekCard(w, items, renderItem, urgencyClass, limit){
-    const daysUntil=Math.round((w-today)/86400000);
-    const urgency=urgencyClass||(daysUntil<=7?'urgent':daysUntil<=30?'soon':'');
-    const badge=urgency?`<span class="tl-badge ${urgency}">${urgency==='urgent'?'esta semana':'próxima'}</span>`:'';
-    const total=items.reduce((s,x)=>s+(x.chequeAmount??x.amount??0),0);
-    const body=items.map(renderItem).join('');
-    const overLimit = limit && total > limit;
-    const limitBar = limit ? (()=>{
-      const pct=Math.min(Math.round(total/limit*100),100);
-      const color=total>limit?'var(--red)':total>limit*0.8?'#d99a3e':'#1f9d57';
-      return `<div style="padding:7px 16px 9px;background:${overLimit?'var(--red-bg)':'var(--bg-tint)'};border-bottom:1px solid var(--line-soft)">
-        <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:4px">
-          <span style="color:var(--ink-soft)">Límite: ${fmt.format(limit)}</span>
-          <span style="font-weight:700;color:${overLimit?'var(--red)':'#1f9d57'}">
-            ${overLimit?'⚠️ +'+fmt.format(total-limit)+' sobre el límite':'✅ '+fmt.format(limit-total)+' libre'}
-          </span>
-        </div>
-        <div style="height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden">
-          <div style="height:100%;width:${pct}%;background:${color};border-radius:3px"></div>
-        </div>
-      </div>`;
-    })() : '';
-    return `<div class="tl-card ${urgency}${overLimit?' urgent':''}">
-      <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
-        <div class="tl-week-meta"><span class="tl-chev">▶</span>
-          <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
-          ${overLimit?'<span class="tl-badge urgent">⚠️ sobre el límite</span>':''}
-        </div>
-        <span class="tl-week-total">${fmt.format(total)}</span>
-      </div>
-      ${limitBar}
-      <div class="tl-body">${body}</div>
-    </div>`;
-  }
-
-  // Sección pagos a proveedores
-  const payWeeks=weeks.filter(w=>(payMap[weekKey(w)]||[]).length>0);
-  const payCards=payWeeks.map(w=>{
-    const pays=payMap[weekKey(w)];
-    return makeWeekCard(w, pays, p=>`
-      <div class="tl-item pay">
-        <div class="tl-icon">💳</div>
-        <div class="tl-info">
-          <div class="tl-supplier">${p.supplier}</div>
-          <div class="tl-sub">pago a proveedor · plazo ${p.plazo??termOf(p.supplier)} días</div>
-        </div>
-        <div class="tl-bar-wrap"><div class="tl-bar pay" style="width:${Math.round(p.amount/maxAmt*100)}%"></div></div>
-        <div class="tl-amt pay">${fmt.format(p.amount)}</div>
-      </div>`);
-  }).join('');
-
-  const pagosSection=`<div class="proj-section">
-    <div class="proj-section-title" style="color:var(--red)">💳 Pagos a Proveedores — semana a semana</div>
-    <div style="padding:12px 14px 4px">
-      ${payCards||'<div class="tl-empty">No hay pagos proyectados todavía.</div>'}
-    </div>
-  </div>`;
-
-  // Sección cheques a cubrir
-  const cheqWeeks=weeks.filter(w=>(chequeMap[weekKey(w)]||[]).length>0);
-  const cheqCards=cheqWeeks.map(w=>{
-    const cheques=chequeMap[weekKey(w)];
-    const total=cheques.reduce((s,c)=>s+c.chequeAmount,0);
-    const daysUntil=Math.round((w-today)/86400000);
-    const urgency=daysUntil<=7?'urgent':daysUntil<=30?'soon':'';
-    const badge=urgency?`<span class="tl-badge ${urgency}">${urgency==='urgent'?'esta semana':'próxima'}</span>`:'';
-    const overLimit=total>CHEQUE_LIMIT;
-    const pct=Math.min(Math.round(total/CHEQUE_LIMIT*100),100);
-    const barColor=overLimit?'var(--red)':total>CHEQUE_LIMIT*0.8?'#d99a3e':'#1f9d57';
-    const limitBar=`<div style="padding:7px 16px 9px;background:${overLimit?'var(--red-bg)':'var(--bg-tint)'};border-bottom:1px solid var(--line-soft)">
-      <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:4px">
-        <span style="color:var(--ink-soft)">Límite: ${fmt.format(CHEQUE_LIMIT)}</span>
-        <span style="font-weight:700;color:${overLimit?'var(--red)':'#1f9d57'}">
-          ${overLimit?'⚠️ +'+fmt.format(total-CHEQUE_LIMIT)+' sobre el límite':'✅ '+fmt.format(CHEQUE_LIMIT-total)+' libre'}
-        </span>
-      </div>
-      <div style="height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden">
-        <div style="width:${pct}%;height:100%;background:${barColor};border-radius:3px"></div>
-      </div>
-    </div>`;
-    const cheqItems=cheques.map(c=>`
-      <div class="tl-item cheq">
-        <div class="tl-icon">🏦</div>
-        <div class="tl-info">
-          <div class="tl-supplier">${c.supplier}</div>
-          <div class="tl-sub">cheque a ${c.chequeDias}d · pago emitido ${c.payWeekLabel}</div>
-        </div>
-        <div class="tl-bar-wrap"><div class="tl-bar cheq" style="width:${Math.round(c.chequeAmount/maxAmt*100)}%"></div></div>
-        <div class="tl-amt cheq">${fmt.format(c.chequeAmount)}</div>
-      </div>`).join('');
-    return `<div class="tl-card ${urgency}${overLimit?' urgent':''}">
-      <div class="tl-week-head" onclick="this.parentNode.classList.toggle('open')">
-        <div class="tl-week-meta"><span class="tl-chev">▶</span>
-          <span class="tl-week-label">${weekLabelLong(w)}</span>${badge}
-          ${overLimit?`<span class="tl-badge urgent">⚠️ sobre el límite</span>`:''}
-        </div>
-        <span class="tl-week-total" style="color:${overLimit?'var(--red)':'var(--ink)'}">${fmt.format(total)}</span>
-      </div>
-      ${limitBar}
-      <div class="tl-body">${cheqItems}</div>
-    </div>`;
-  }).join('');
-
-  const chequesSection=`<div class="proj-section">
-    <div class="proj-section-title" style="color:#5b3aa0">🏦 Cheques a Cubrir — semana a semana
-      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">objetivo: no superar ${fmt.format(CHEQUE_LIMIT)}/semana</span>
-    </div>
-    <div style="padding:12px 14px 4px">
-      ${cheqCards||'<div class="tl-empty">No hay cheques a cubrir todavía.</div>'}
-    </div>
-  </div>`;
-
-  // ---- Facturas POR VENCER de F1/F2 — comprobante por comprobante ----
-  const allItems=rawItems();
-  const pendientes=allItems
-    .filter(i=>i.prov && i.saldo>0 && !isVencido(i) && !esCredito(i))
-    .sort((a,b)=>b.dias-a.dias);   // más próximo a vencer primero
-
-  const pendRows=pendientes.length===0
-    ?'<div class="proj-empty">No hay facturas por vencer en F1/F2.</div>'
-    :pendientes.map(i=>`
-      <tr>
-        <td>
-          <div style="font-weight:700;font-size:.88rem">${i.prov}</div>
-          <div style="font-size:.75rem;color:var(--ink-soft)">${i.comp||''} ${i.nro||''}</div>
-        </td>
-        <td style="font-family:'JetBrains Mono',monospace;font-size:.8rem">${i.fvto||'—'}</td>
-        <td><span class="tag-plazo">${i.dias}d</span></td>
-        <td class="r imp">${fmt2.format(i.saldo)}</td>
-        <td><button class="proj-btn" style="padding:5px 12px;font-size:.8rem"
-          onclick="prefillAdd('${(i.prov||'').replace(/'/g,"\\'")}',${i.saldo})">
-          ➕ Planificar
-        </button></td>
-      </tr>`).join('');
-
-  const pendientesSection=`<div class="proj-section">
-    <div class="proj-section-title" style="cursor:pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
-      📥 Facturas por vencer — planificá el pago
-      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">${pendientes.length} comprobantes · hacé click para desplegar</span>
-      <span style="margin-left:auto;font-size:.85rem;color:var(--ink-soft)">▼</span>
-    </div>
-    <div class="hidden">
-      <table class="proj-table">
-        <thead><tr><th>Proveedor · Comprobante</th><th>Vencimiento</th><th>Días</th><th class="r">Importe</th><th></th></tr></thead>
-        <tbody>${pendRows}</tbody>
-      </table>
-    </div>
-  </div>`;
-
-  // ---- Settings panel ----
-  const cfg=getGhCfg()||{};
-  const settingsSection=`<div class="proj-section" style="margin-bottom:14px">
-    <div class="proj-section-title" style="cursor:pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
-      ⚙️ Configuración de sincronización
-      <span style="font-size:.75rem;font-weight:400;color:var(--ink-soft);margin-left:8px">
-        ${cfg.usuario&&cfg.repo?`conectado a ${cfg.usuario}/${cfg.repo}`:'sin configurar — las compras solo se guardan en este navegador'}
-      </span>
-    </div>
-    <div class="hidden" style="padding:16px 18px;display:flex;flex-direction:column;gap:10px">
-      <p style="font-size:.83rem;color:var(--ink-soft)">
-        Configurá tu repositorio de GitHub para que las compras se compartan entre todos los usuarios del tablero.
-        El token se guarda solo en <b>este navegador</b>.
-      </p>
-      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end">
-        <div><label style="font-size:.78rem;color:var(--ink-soft);display:block;margin-bottom:3px">Usuario GitHub</label>
-          <input id="cfg-usuario" value="${cfg.usuario||''}" placeholder="ej: bautigaletto"
-            style="font:inherit;font-size:.88rem;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);width:180px"></div>
-        <div><label style="font-size:.78rem;color:var(--ink-soft);display:block;margin-bottom:3px">Repositorio</label>
-          <input id="cfg-repo" value="${cfg.repo||''}" placeholder="ej: tablero-pagos-dehache"
-            style="font:inherit;font-size:.88rem;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);width:220px"></div>
-        <div><label style="font-size:.78rem;color:var(--ink-soft);display:block;margin-bottom:3px">Token de acceso (para guardar)</label>
-          <input id="cfg-token" type="password" value="${cfg.token||''}" placeholder="ghp_…"
-            style="font:inherit;font-size:.88rem;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);width:240px"></div>
-        <button onclick="saveGhConfig()" class="proj-btn" style="padding:9px 18px">Guardar config</button>
-      </div>
-      <p style="font-size:.76rem;color:var(--ink-soft)">
-        Sin token: podés ver las compras de otros pero no guardar. Con token (permiso <b>repo</b>): podés agregar y editar.
-      </p>
-    </div>
-  </div>`;
-
-  // ---- Back button + estado de guardado ----
-  const backBtn=`<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-    <button onclick="switchToDebt()" style="font:inherit;font-size:.84rem;font-weight:600;
-      color:var(--blue);background:var(--blue-bg);border:1px solid rgba(0,34,106,.15);
-      border-radius:10px;padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px">
-      ← Volver a cuentas a pagar
-    </button>
-    <span id="save-status" style="font-size:.8rem;color:var(--ink-soft)">${saveStatus.msg||''}</span>
-    <button onclick="refreshPurchases()" style="font:inherit;font-size:.82rem;font-weight:600;color:var(--ink-soft);background:var(--bg-tint);border:1px solid var(--line);border-radius:9px;padding:7px 13px;cursor:pointer">
-      🔄 Actualizar
-    </button>
-  </div>`;
-
-  document.getElementById('proj').innerHTML=backBtn+settingsSection+summary+pendientesSection+addForm+comprasSection+pagosSection+chequesSection;
-}
-
-// Auto-rellena el plazo cuando el usuario elige un proveedor conocido
-function autoFillPlazo(){
-  const prov=(document.getElementById('pj-prov')?.value||'').trim();
-  const plazoInput=document.getElementById('pj-plazo');
-  if(plazoInput && prov && terms[prov]) plazoInput.value=terms[prov];
-}
-
-function startEdit(id){
-  editingId=id;
-  const p=purchases.find(x=>x.id===id);
-  renderProjection();
-  // Pre-cargar cheques de tercero
-  if(p && p.chequesTercero>0){
-    const tEl=document.getElementById('pj-tercero');
-    if(tEl) tEl.value=fmtNum.format(p.chequesTercero);
-  }
-  // Pre-cargar inputs de cheques propios si los tiene
-  if(p && (p.cheques||[]).length>0){
-    updateChequeInputs(p.cheques.length);
-    p.cheques.forEach((ch,i)=>{
-      const dEl=document.getElementById(`pj-ch-${i+1}-dias`);
-      const mEl=document.getElementById(`pj-ch-${i+1}-monto`);
-      if(dEl) dEl.value=ch.dias;
-      if(mEl) mEl.value=fmtNum.format(ch.amount);
-    });
-  }
-  document.querySelector('.proj-add')?.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function cancelEdit(){
-  editingId=null;
-  renderProjection();
-}
-
-// Pre-carga el formulario con datos de una factura de F1/F2
-function prefillAdd(supplier, amount){
-  editingId=null;
-  renderProjection();
-  setTimeout(()=>{
-    const provEl=document.getElementById('pj-prov');
-    const amtEl=document.getElementById('pj-amt');
-    if(provEl){ provEl.value=supplier; autoFillPlazo(); }
-    if(amtEl) amtEl.value=fmtNum.format(amount);
-    document.querySelector('.proj-add')?.scrollIntoView({behavior:'smooth',block:'nearest'});
-  },50);
-}
-
-// Vuelve a la vista de cuentas a pagar (tab Por vencer)
-function switchToDebt(){
-  const btn=document.querySelector('#tabs button[data-tab="porvencer"]');
-  if(btn) btn.click();
-}
-
-function saveGhConfig(){
-  const u=document.getElementById('cfg-usuario')?.value.trim();
-  const r=document.getElementById('cfg-repo')?.value.trim();
-  const t=document.getElementById('cfg-token')?.value.trim();
-  if(!u||!r){ alert('Completá usuario y repositorio.'); return; }
-  setGhCfg({usuario:u,repo:r,token:t||''});
-  renderProjection();
-  // Cargar compras compartidas con la nueva config
-  fetchSharedPurchases().then(shared=>{ if(shared!==null){ purchases=shared; savePurchases(); renderProjection(); } });
-}
-
-async function refreshPurchases(){
-  updateSaveStatus('saving','Actualizando…');
-  const shared=await fetchSharedPurchases();
-  if(shared!==null){
-    purchases=shared;
-    try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(purchases)); }catch(e){}
-    updateSaveStatus('ok',`Actualizado ${new Date().toLocaleTimeString('es-AR')}`);
-    renderProjection();
-  } else {
-    updateSaveStatus('err','No se pudo conectar a GitHub');
-  }
-}
-
-function handleAddPurchase(){
-  const supplier=(document.getElementById('pj-prov').value||'').trim();
-  const week=document.getElementById('pj-week').value;
-  const amount=parseAmtInput(document.getElementById('pj-amt').value);
-  const plazo=parseInt(document.getElementById('pj-plazo').value)||DEFAULT_TERM;
-  const n=parseInt(document.getElementById('pj-ncheques').value)||0;  if(!supplier||!week||isNaN(amount)||amount<=0){
-    alert('Completá proveedor, semana y monto antes de agregar.'); return;
-  }
-  terms[supplier]=plazo; savePlazos();
-  const chequesTercero = parseAmtInput(document.getElementById('pj-tercero')?.value) || 0;
-  const cheques=[];
-  if(n>0){
-    let montoIngresado=0;
-    for(let i=1;i<=n;i++){
-      const dias=parseInt(document.getElementById(`pj-ch-${i}-dias`)?.value)||0;
-      if(dias<=0){ alert(`Ingresá los días del cheque ${i}.`); return; }
-      const montoInput=parseAmtInput(document.getElementById(`pj-ch-${i}-monto`)?.value);
-      cheques.push({dias, amount:isNaN(montoInput)||montoInput<=0?0:montoInput});
-      montoIngresado+=cheques[i-1].amount;
-    }
-    const sinMonto=cheques.every(c=>c.amount===0);
-    if(sinMonto){
-      const base_importe = amount - chequesTercero;   // solo el monto propio
-      const base=Math.floor(base_importe/n);
-      cheques.forEach((c,i)=>{ c.amount=i===n-1?base_importe-base*(n-1):base; });
-    } else if(Math.abs(montoIngresado-amount)>1){
-      if(!confirm(`La suma de los cheques (${fmt.format(montoIngresado)}) difiere del total (${fmt.format(amount)}). ¿Continuás?`)) return;
-    }
-  }
-  if(editingId){
-    // Actualizar compra existente
-    const idx=purchases.findIndex(p=>p.id===editingId);
-    if(idx>=0) purchases[idx]={...purchases[idx],supplier,week,amount,plazo,chequesTercero,cheques};
-    editingId=null;
-  } else {
-    purchases.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),supplier,week,amount,plazo,chequesTercero,cheques});
-  }
-  savePurchases(); renderProjection();
-}
-function deletePurchase(id){
-  if(!confirm('¿Eliminar esta compra?')) return;
-  purchases=purchases.filter(p=>p.id!==id);
-  savePurchases(); renderProjection();
-}
-loadPurchases();
 
 // ============================================================
 document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value;render();});
@@ -1222,10 +491,7 @@ document.getElementById('sort').addEventListener('change',e=>{state.sort=e.targe
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
   state.tab=b.dataset.tab;
   document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  const isProj=state.tab==='proyeccion';
-  document.getElementById('app').classList.toggle('hidden',isProj);
-  document.getElementById('proj').classList.toggle('hidden',!isProj);
-  if(isProj) renderProjection(); else render();
+  render();
 });
 
 init();
